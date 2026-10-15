@@ -1,5 +1,11 @@
 # Changelog do playbook
 
+## 0.6.0 — 2026-10-15
+
+- Fase 5: **Novo produto** no Hub cria o repositório a partir de `template-multitenant` ou `template-saas` (Admin Hub, PR #12). `architecture/novo-projeto-pelo-hub.md` passa a "implementado"; `guias/novo-produto.md` atualizado.
+- Templates de código da casa: identidade SB Tech, `tenant-provision`/`tenant-modules` no contrato de `integracoes/hub.md`, `/welcome`, CI de PR, testes; saas com `contas`/`conta_modulos` e cadastro direto (`conta-registrar` + `hub-register-account`).
+- `templates/repo/tailwind.config.ts` ganha os tokens dos componentes shadcn (card, popover, secondary, accent, destructive, input, ring, sidebar), como no Hub.
+
 ## 0.5.0 — 2026-10-15
 
 - Novo `integracoes/`: um guia por integração no mesmo formato (resumo, arquitetura, endpoints, secrets, no produto, checklist, erros comuns, fonte), conferido contra o código do Hub e do ArenaHub HML:

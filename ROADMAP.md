@@ -7,7 +7,7 @@
 | 2 | Agentes rodando no GitHub Actions, com eventos de cada execução | **Concluída em 2026-10-15**: primeira execução abriu o PR #9 no Admin Hub |
 | 3 | Tabelas `agent_runs` / `agent_events` no Hub e painel ligado a elas | **Concluída em 2026-10-15** |
 | 4 | Fila de entrada (Trello ou Issues) e aprovações (Slack) | A fazer |
-| 5 | "Novo produto" no Hub criando o repo (`architecture/novo-projeto-pelo-hub.md`) | Especificada. Enquanto isso: `guias/novo-produto.md` |
+| 5 | "Novo produto" no Hub criando o repo (`architecture/novo-projeto-pelo-hub.md`) | **Implementada** (PR #12 do Admin Hub). Para ligar: App SBTech-Provisioner, repos de template, migration e publicação de `hub-create-project` |
 | 6 | Escritório 3D | **No ar** desde 2026-10-15 (PR #7 do Admin Hub) |
 | 7 | Guias de integração e agente `integrador` | **Entregue** na 0.5.0. Próximo: rodar o integrador no Promobot (`hub`, `whatsapp-meta`) |
 

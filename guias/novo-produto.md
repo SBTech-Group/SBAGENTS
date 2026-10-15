@@ -1,6 +1,6 @@
 # Criar um produto novo
 
-Do zero até o primeiro cliente provisionado. Enquanto o botão "Novo produto" do Hub não existe (`architecture/novo-projeto-pelo-hub.md`), estes são os passos. Cada passo diz **quem** faz: você, um agente ou o Hub.
+Do zero até o primeiro cliente provisionado. Cada passo diz **quem** faz: você, um agente ou o Hub. Os passos 2 e 3 são feitos pelo botão **Novo produto** do Hub (`architecture/novo-projeto-pelo-hub.md`); o resto aparece como checklist na tela do produto.
 
 ```
  1 Decidir ─▶ 2 Repo ─▶ 3 Código base ─▶ 4 Supabase ─▶ 5 Coolify ─▶ 6 Hub ─▶ 7 Integrações ─▶ 8 Conferir ─▶ 9 Vender
@@ -18,18 +18,23 @@ Do zero até o primeiro cliente provisionado. Enquanto o botão "Novo produto" d
 
 Trocar `saas` por `multi-tenant` depois exige migrar todas as tabelas. Decida antes.
 
-## 2. Repo no GitHub (você, 10 min)
+## 2. Repo no GitHub (Hub, 1 min)
+
+**Hub → Produtos → Novo produto**: nome, slug, descrição, modalidade, módulos e integrações. O Hub cria `SBTech-Group/<slug>` a partir do template da modalidade, preenche `AGENTS.md` e os módulos, cria `hml` e protege `main` e `hml`. Acompanhe no card **Repositório** do produto.
+
+Sem o Hub (à mão):
+
 
 1. Crie `SBTech-Group/<slug>`, privado.
 2. Crie os branches `main` e `hml` e proteja os dois: PR obrigatório e CI verde (ADR 0002, GIT-01).
 3. Instale o GitHub App **SBTech-Agents** no repo (Settings da organização → GitHub Apps → SBTech-Agents → Configure).
 
-## 3. Código base (agente + você)
+## 3. Código base (já vem do template)
 
-1. Copie o template da modalidade para o repo (hoje a pasta local `Template Saas`; vira repo de template no GitHub na Fase 5 do roadmap) e suba em `hml`.
-2. Com o Claude Code na pasta do repo e o SBAGENTS ao lado, use `templates/prompts/PROMPT_NOVO_PRODUTO.md`: ele preenche nome, identidade visual SB Tech, módulos e integrações, e mostra o plano antes de mexer.
-3. Rode o agente **onboarding** (workflow "Rodar agente") para gerar `AGENTS.md` e `CLAUDE.md` no formato da casa.
-4. Rode o **architect** em `diagnostico`. Corrija os bloqueantes com `adequacao` antes de seguir.
+O template traz identidade SB Tech, login, `/welcome`, `tenant-provision`, `tenant-modules`, CI e testes. Depois do repo criado:
+
+1. Rode o **architect** em `diagnostico` no repo novo (workflow "Rodar agente"). Corrija os bloqueantes com `adequacao` antes de seguir.
+2. Desenvolva os módulos em `src/modules/<chave>/` e registre em `src/app/menu.tsx`. A lista que o Hub lê fica em `supabase/functions/_shared/modules.ts`.
 
 Identidade visual não é opcional: `src/styles/sb-tech-base.css` idêntico ao do template, cores só por token (FE-02, FE-03).
 

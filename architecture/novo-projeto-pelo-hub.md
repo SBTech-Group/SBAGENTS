@@ -1,6 +1,14 @@
 # Novo projeto pelo Hub — especificação
 
-Status: proposta (2026-10-14). Revisada contra o Admin Hub em `2208ddd`.
+Status: **implementado** em 2026-10-15 (Admin Hub, PR #12: `hub-create-project`, tela Novo produto). Templates: `SBTech-Group/template-multitenant` e `template-saas`. Abaixo, a especificação original; o que mudou na implementação está em "Como ficou".
+
+## Como ficou
+
+- GitHub App próprio, **SBTech-Provisioner** (Administration e Contents em escrita), separado do SBTech-Agents. Secrets no Hub: `GITHUB_PROVISIONER_APP_ID`, `GITHUB_PROVISIONER_PRIVATE_KEY`.
+- O Hub preenche os marcadores `{{...}}` dos arquivos do template (`AGENTS.md`, `README.md`, `.env.example`, `src/config/produto.ts`) e gera `supabase/functions/_shared/modules.ts`, num único commit.
+- Os agentes não são copiados para o repo: o produto aponta para o SBAGENTS (DOC-03) e os agentes rodam pelo workflow "Rodar agente".
+- Proteção de branch em repo privado depende do plano do GitHub; sem ela, o Hub registra um aviso.
+- Colunas em `produtos`: `repo_url`, `repo_status`, `repo_etapa`, `repo_erro`, `repo_avisos`, `playbook_version`, `integracoes`.
 
 ## Objetivo
 

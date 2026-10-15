@@ -37,6 +37,35 @@ const config: Config = {
 
         // Regra da casa: dinheiro é gold mesmo se primary for trocado
         money: 'hsl(var(--color-money) / <alpha-value>)',
+
+        // shadcn-compat aliases → map to our design system tokens
+        card: {
+          DEFAULT:    'hsl(var(--color-surface) / <alpha-value>)',
+          foreground: 'hsl(var(--color-foreground) / <alpha-value>)',
+        },
+        popover: {
+          DEFAULT:    'hsl(var(--color-surface-2) / <alpha-value>)',
+          foreground: 'hsl(var(--color-foreground) / <alpha-value>)',
+        },
+        secondary: {
+          DEFAULT:    'hsl(var(--color-surface-2) / <alpha-value>)',
+          foreground: 'hsl(var(--color-foreground-muted) / <alpha-value>)',
+        },
+        accent: {
+          DEFAULT:    'hsl(var(--color-surface-3) / <alpha-value>)',
+          foreground: 'hsl(var(--color-foreground) / <alpha-value>)',
+        },
+        destructive: {
+          DEFAULT:    'hsl(var(--color-danger) / <alpha-value>)',
+          foreground: 'hsl(var(--color-foreground) / <alpha-value>)',
+        },
+        sidebar: {
+          DEFAULT:    'hsl(var(--color-surface) / <alpha-value>)',
+          foreground: 'hsl(var(--color-foreground) / <alpha-value>)',
+          border:     'hsl(var(--color-border) / <alpha-value>)',
+        },
+        input:  'hsl(var(--color-border) / <alpha-value>)',
+        ring:   'hsl(var(--color-primary) / <alpha-value>)',
       },
       fontFamily: {
         sans:    'var(--font-sans)',
