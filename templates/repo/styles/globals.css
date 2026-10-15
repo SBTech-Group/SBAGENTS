@@ -1,0 +1,41 @@
+/* ⚠️ Balde 1: ordem de cascata + reset mínimo. Não editar por produto.
+   Ordem de import: tokens semantic do produto (que internamente
+   importa sb-tech-base) → Tailwind directives → reset base. */
+
+@import './tokens.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html,
+  body {
+    background: hsl(var(--color-background));
+    color: hsl(var(--color-foreground));
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    min-height: 100vh;
+  }
+
+  /* Regra da casa: alinhamento de números importa mais que estética.
+     Tabular-nums em todo elemento numérico. */
+  [data-numeric],
+  .sb-stat,
+  .sb-mono,
+  .sb-code,
+  .sb-kbd {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Focus ring da casa — gold em ambos os temas */
+  *:focus-visible {
+    outline: none;
+    box-shadow: var(--sb-shadow-focus);
+    border-color: hsl(var(--sb-gold-500));
+  }
+}

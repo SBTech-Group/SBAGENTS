@@ -1,0 +1,103 @@
+name: Rodar agente
+
+# Roda um agente do SBAGENTS num repo de produto, sem ninguém no terminal.
+# Resultado: um PR para `hml` no repo alvo e os eventos no Escritório do Hub.
+# Configuração necessária: runner/README.md.
+
+on:
+  workflow_dispatch:
+    inputs:
+      repo:
+        description: "Repo alvo (ex.: SBTech-Group/promobot)"
+        required: true
+      produto_slug:
+        description: "Slug do produto no Hub (a sala no Escritório)"
+        required: true
+      agente:
+        description: "Agente"
+        type: choice
+        options: [architect, onboarding]
+        default: architect
+      modo:
+        description: "Modo (onboarding ignora)"
+        type: choice
+        options: [diagnostico, adequacao]
+        default: diagnostico
+      achados:
+        description: "Só em adequação — IDs aprovados separados por vírgula (ex.: SEC-06-a,GIT-02-a)"
+        required: false
+        default: ''
+
+# Um agente por repo de cada vez.
+concurrency:
+  group: agente-${{ inputs.repo }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      AGENT_EVENTS_URL: ${{ vars.AGENT_EVENTS_URL }}
+      AGENT_EVENTS_TOKEN: ${{ secrets.AGENT_EVENTS_TOKEN }}
+    steps:
+      - name: Separar dono e nome do repo
+        id: alvo
+        env:
+          REPO: ${{ inputs.repo }}
+        run: |
+          if [[ ! "$REPO" =~ ^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$ ]]; then echo "::error::repo inválido: $REPO"; exit 1; fi
+          echo "owner=${REPO%%/*}" >> "$GITHUB_OUTPUT"
+          echo "name=${REPO##*/}" >> "$GITHUB_OUTPUT"
+
+      - name: Token do GitHub App (só o repo alvo)
+        id: token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ vars.AGENTS_APP_ID }}
+          private-key: ${{ secrets.AGENTS_APP_PRIVATE_KEY }}
+          owner: ${{ steps.alvo.outputs.owner }}
+          repositories: ${{ steps.alvo.outputs.name }}
+
+      - name: Checkout do SBAGENTS (somente leitura)
+        uses: actions/checkout@v4
+        with:
+          path: SBAGENTS
+
+      - name: Checkout do repo alvo a partir de hml
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ inputs.repo }}
+          ref: hml
+          token: ${{ steps.token.outputs.token }}
+          path: alvo
+
+      - name: Node e Claude Code
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - run: npm install -g @anthropic-ai/claude-code
+
+      - name: Rodar o agente
+        env:
+          # Um dos dois: token da assinatura (claude setup-token) ou chave da API.
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GH_TOKEN: ${{ steps.token.outputs.token }}
+          AGENTE: ${{ inputs.agente }}
+          MODO: ${{ inputs.modo }}
+          ACHADOS: ${{ inputs.achados }}
+          PRODUTO_SLUG: ${{ inputs.produto_slug }}
+          ALVO_REPO: ${{ inputs.repo }}
+          AGENT_MAX_USD: ${{ vars.AGENT_MAX_USD || '5' }}
+        run: node SBAGENTS/runner/run.mjs
+
+      - name: Avisar o Escritório se o job morrer
+        if: failure() || cancelled()
+        env:
+          JOB_STATUS: ${{ job.status }}
+        run: node SBAGENTS/runner/fail.mjs

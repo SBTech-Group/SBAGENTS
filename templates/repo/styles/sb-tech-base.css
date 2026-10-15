@@ -1,0 +1,225 @@
+/* ⚠️ Balde 1 (Core do template): não editar por produto.
+   Identidade visual SB Tech — primitivos da casa.
+   Fonte: design-system/colors_and_type.css. Atualizações neste
+   arquivo propagam para todos os produtos. */
+
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap");
+
+:root {
+  /* ============================================================
+     PRIMITIVOS — TEMA DARK (padrão da casa)
+     HSL stripado para suportar alpha via Tailwind.
+     Comentário traz o hex original como referência humana.
+     ============================================================ */
+
+  /* Brand — metallic gold ramp */
+  --sb-gold-300: 43 71% 74%;     /* #ECD08C — text accents claros */
+  --sb-gold-400: 42 67% 65%;     /* #E2BE6A — hover/secondary */
+  --sb-gold-500: 41 62% 56%;     /* #D4A84A — primary metallic gold */
+  --sb-gold-600: 41 53% 47%;     /* #B89238 — pressed */
+  --sb-gold-700: 41 62% 35%;     /* #8E6F22 — borders raros sobre claro */
+
+  /* Surfaces dark */
+  --sb-bg:            0 0% 4%;   /* #0A0A0A — page bg */
+  --sb-surface:       0 0% 8%;   /* #141414 — cards */
+  --sb-surface-2:     0 0% 11%;  /* #1C1C1C — inputs, nested */
+  --sb-surface-3:     0 0% 14%;  /* #232323 — hover */
+  --sb-border:        0 0% 15%;  /* #262626 */
+  --sb-border-strong: 0 0% 21%;  /* #353535 */
+  --sb-divider:       0 0% 12%;  /* #1F1F1F */
+
+  /* Text dark */
+  --sb-fg-1:        0 0% 100%;   /* #FFFFFF — primary */
+  --sb-fg-2:        0 0% 72%;    /* #B8B8B8 — secondary */
+  --sb-fg-3:        0 0% 43%;    /* #6E6E6E — muted */
+  --sb-fg-4:        0 0% 29%;    /* #4A4A4A — disabled/placeholder */
+  --sb-fg-on-brand: 0 0% 4%;     /* #0A0A0A — texto sobre gold */
+
+  /* ============================================================
+     PRIMITIVOS — TEMA LIGHT (alternativa)
+     Usados quando tokens.css escolhe tema light.
+     Os tints e cores semânticas (success/warning/danger/info)
+     são iguais em ambos os temas — não há variante light delas.
+     ============================================================ */
+
+  --sb-bg-light:            0 0% 98%;   /* #FAFAFA */
+  --sb-surface-light:        0 0% 100%; /* #FFFFFF */
+  --sb-surface-2-light:      0 0% 96%;  /* #F5F5F5 */
+  --sb-surface-3-light:      0 0% 93%;  /* #EEEEEE */
+  --sb-border-light:         0 0% 90%;  /* #E5E5E5 */
+  --sb-border-strong-light:  0 0% 83%;  /* #D4D4D4 */
+  --sb-divider-light:        0 0% 93%;  /* #ECECEC */
+
+  --sb-fg-1-light: 0 0% 4%;     /* #0A0A0A */
+  --sb-fg-2-light: 0 0% 25%;    /* #404040 */
+  --sb-fg-3-light: 0 0% 45%;    /* #737373 */
+  --sb-fg-4-light: 0 0% 64%;    /* #A3A3A3 */
+
+  /* ============================================================
+     CORES SEMÂNTICAS (status — iguais em ambos os temas)
+     ============================================================ */
+  --sb-success: 151 65% 54%;    /* #3DD68C */
+  --sb-warning:  42 76% 59%;    /* #E6B547 */
+  --sb-danger:  359 84% 69%;    /* #F26D70 */
+  --sb-info:    220 70% 70%;    /* #7DA0E8 */
+
+  /* ============================================================
+     SOFT TINTS (badges, sparklines)
+     Mantidos em rgba — uso direto via CSS var, sem alpha Tailwind.
+     ============================================================ */
+  --sb-peach-bg:  rgba(224, 122,  79, 0.14);
+  --sb-peach-fg:  #E89A6A;
+  --sb-mint-bg:   rgba( 43, 154, 110, 0.14);
+  --sb-mint-fg:   #4FCB8E;
+  --sb-sky-bg:    rgba( 68, 112, 204, 0.16);
+  --sb-sky-fg:    #7DA0E8;
+  --sb-butter-bg: rgba(212, 168,  74, 0.16);
+  --sb-butter-fg: #E2BE6A;
+  --sb-rose-bg:   rgba(193,  58,  86, 0.16);
+  --sb-rose-fg:   #E0708A;
+  --sb-gold-bg:   rgba(212, 168,  74, 0.16);
+  --sb-gold-tint-strong: rgba(212, 168, 74, 0.22);
+  --sb-gold-border:       rgba(212, 168, 74, 0.32);
+
+  /* Status backgrounds (rgba pra ler bem sobre qualquer surface) */
+  --sb-success-bg: rgba( 61, 214, 140, 0.14);
+  --sb-warning-bg: rgba(230, 181,  71, 0.14);
+  --sb-danger-bg:  rgba(242, 109, 112, 0.14);
+  --sb-info-bg:    rgba(125, 160, 232, 0.14);
+
+  /* ============================================================
+     GRADIENTES (hex direto)
+     ============================================================ */
+  --sb-gold-gradient: linear-gradient(135deg, #ECD08C 0%, #D4A84A 45%, #B89238 100%);
+  --sb-gold-line:     linear-gradient(90deg, transparent, #D4A84A 50%, transparent);
+
+  /* ============================================================
+     TIPOGRAFIA — DNA da casa, igual em todos os produtos
+     ============================================================ */
+  --sb-font-sans:    "Manrope", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --sb-font-mono:    "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --sb-font-display: var(--sb-font-sans);
+
+  /* Type scale */
+  --sb-text-xs:   12px;
+  --sb-text-sm:   13px;
+  --sb-text-base: 14px;
+  --sb-text-md:   15px;
+  --sb-text-lg:   17px;
+  --sb-text-xl:   20px;
+  --sb-text-2xl:  24px;
+  --sb-text-3xl:  30px;
+  --sb-text-4xl:  36px;
+  --sb-text-5xl:  48px;
+
+  /* Line height & weights & tracking */
+  --sb-lh-tight: 1.15;
+  --sb-lh-snug:  1.3;
+  --sb-lh-base:  1.5;
+  --sb-lh-loose: 1.7;
+
+  --sb-fw-regular:   400;
+  --sb-fw-medium:    500;
+  --sb-fw-semibold:  600;
+  --sb-fw-bold:      700;
+  --sb-fw-extrabold: 800;
+
+  --sb-track-tight:  -0.02em;
+  --sb-track-normal: 0;
+  --sb-track-wide:   0.08em;
+  --sb-track-mono:   -0.01em;
+
+  /* ============================================================
+     ESPAÇAMENTO (4-based), RAIOS, MOTION
+     ============================================================ */
+  --sb-space-1:  4px;   --sb-space-2:  8px;   --sb-space-3: 12px;
+  --sb-space-4: 16px;   --sb-space-5: 20px;   --sb-space-6: 24px;
+  --sb-space-8: 32px;   --sb-space-10: 40px;  --sb-space-12: 48px;
+  --sb-space-16: 64px;
+
+  --sb-radius-sm:   6px;
+  --sb-radius-md:   10px;
+  --sb-radius-lg:   14px;
+  --sb-radius-xl:   20px;
+  --sb-radius-pill: 9999px;
+
+  --sb-ease-out:    cubic-bezier(0.22, 1, 0.36, 1);
+  --sb-ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --sb-dur-fast: 120ms;
+  --sb-dur-base: 180ms;
+  --sb-dur-slow: 280ms;
+
+  /* ============================================================
+     SHADOWS (rgba direto — deeper em dark, suaves em light)
+     ============================================================ */
+  --sb-shadow-xs:   0 1px 2px rgba(0,0,0,0.4);
+  --sb-shadow-sm:   0 1px 2px rgba(0,0,0,0.45), 0 1px 1px rgba(0,0,0,0.3);
+  --sb-shadow-md:   0 4px 14px rgba(0,0,0,0.55), 0 2px 4px rgba(0,0,0,0.35);
+  --sb-shadow-lg:   0 16px 32px rgba(0,0,0,0.6), 0 6px 10px rgba(0,0,0,0.4);
+  --sb-shadow-focus:     0 0 0 4px rgba(212, 168, 74, 0.28);
+  --sb-shadow-gold-glow: 0 0 0 1px rgba(212, 168, 74, 0.35), 0 8px 28px rgba(212, 168, 74, 0.12);
+}
+
+/* ============================================================
+   CLASSES UTILITY SEMÂNTICAS (estilo da casa)
+   Disponíveis em todo produto. As cores herdam do <body>,
+   que é setado em globals.css conforme o tema escolhido.
+   ============================================================ */
+
+.sb-display {
+  font-family: var(--sb-font-display);
+  font-size: var(--sb-text-5xl);
+  font-weight: var(--sb-fw-extrabold);
+  letter-spacing: var(--sb-track-tight);
+  line-height: var(--sb-lh-tight);
+}
+.sb-h1 { font: 700 var(--sb-text-3xl)/var(--sb-lh-tight) var(--sb-font-sans); letter-spacing: var(--sb-track-tight); }
+.sb-h2 { font: 700 var(--sb-text-2xl)/var(--sb-lh-snug)  var(--sb-font-sans); letter-spacing: var(--sb-track-tight); }
+.sb-h3 { font: 600 var(--sb-text-xl)/var(--sb-lh-snug)   var(--sb-font-sans); letter-spacing: var(--sb-track-tight); }
+.sb-h4 { font: 600 var(--sb-text-lg)/var(--sb-lh-snug)   var(--sb-font-sans); }
+.sb-p     { font: 400 var(--sb-text-base)/var(--sb-lh-base) var(--sb-font-sans); }
+.sb-lead  { font: 400 var(--sb-text-md)/var(--sb-lh-base)   var(--sb-font-sans); }
+.sb-small { font: 400 var(--sb-text-sm)/var(--sb-lh-base)   var(--sb-font-sans); }
+.sb-caption { font: 500 var(--sb-text-xs)/var(--sb-lh-base) var(--sb-font-sans); }
+
+/* Eyebrow — sempre gold, mesmo em produtos com primary diferente.
+   Assinatura visual da casa. */
+.sb-eyebrow {
+  font: 600 11px/1.4 var(--sb-font-sans);
+  letter-spacing: var(--sb-track-wide);
+  text-transform: uppercase;
+  color: hsl(var(--sb-gold-400));
+}
+
+.sb-stat {
+  font: 700 var(--sb-text-3xl)/1.1 var(--sb-font-sans);
+  letter-spacing: var(--sb-track-tight);
+  font-variant-numeric: tabular-nums;
+}
+
+.sb-mono,
+.sb-code {
+  font-family: var(--sb-font-mono);
+  font-size: var(--sb-text-sm);
+  font-weight: var(--sb-fw-medium);
+  letter-spacing: var(--sb-track-mono);
+}
+
+.sb-kbd {
+  font-family: var(--sb-font-mono);
+  font-size: 11px;
+  font-weight: var(--sb-fw-semibold);
+  background: hsl(var(--sb-surface-2));
+  border: 1px solid hsl(var(--sb-border));
+  border-radius: var(--sb-radius-sm);
+  padding: 2px 6px;
+}
+
+/* Gold-text — apenas para acentos de marketing/hero, nunca body */
+.sb-gold-text {
+  background: var(--sb-gold-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}

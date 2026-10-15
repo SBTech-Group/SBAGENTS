@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Resumo de diagnóstico do agente architect",
+  "type": "object",
+  "required": ["repo", "tipo", "playbook_version", "data", "achados"],
+  "properties": {
+    "repo": { "type": "string", "description": "Nome da pasta ou owner/repo" },
+    "tipo": { "enum": ["multi-tenant", "saas", "interno", "servico"] },
+    "tipo_inferido": { "type": "boolean", "description": "true se o AGENTS.md não declara o tipo" },
+    "playbook_version": { "type": "string" },
+    "data": { "type": "string", "format": "date" },
+    "commit": { "type": "string", "description": "HEAD analisado" },
+    "achados": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "regra", "severidade", "evidencia", "proposta", "esforco"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[A-Z]+-[0-9]{2}-[a-z]$" },
+          "regra": { "type": "string" },
+          "severidade": { "enum": ["bloqueante", "importante", "cosmetico"] },
+          "evidencia": { "type": "array", "items": { "type": "string" } },
+          "proposta": { "type": "string" },
+          "esforco": { "enum": ["P", "M", "G"] },
+          "risco": { "type": "string" }
+        }
+      }
+    },
+    "sugestoes": { "type": "array", "items": { "type": "string" } },
+    "perguntas": { "type": "array", "items": { "type": "string" } }
+  }
+}

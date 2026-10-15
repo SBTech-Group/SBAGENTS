@@ -1,0 +1,75 @@
+/* ✏️ Balde 3 (Customizável): edite por produto.
+   Tokens semânticos deste produto.
+   Os primitivos vêm de sb-tech-base.css — não tente editá-los aqui. */
+
+@import './sb-tech-base.css';
+
+/* ============================================================
+   ESCOLHA DO TEMA — DARK (padrão) ou LIGHT
+   Mantenha ATIVO o bloco do tema desejado.
+   Para usar light: comente o bloco dark e descomente o light.
+   ============================================================ */
+
+:root {
+  /* ----- TEMA DARK (padrão, identidade SB Tech) ----- */
+  --color-background:        var(--sb-bg);
+  --color-surface:           var(--sb-surface);
+  --color-surface-2:         var(--sb-surface-2);
+  --color-surface-3:         var(--sb-surface-3);
+  --color-border:            var(--sb-border);
+  --color-border-strong:     var(--sb-border-strong);
+  --color-foreground:        var(--sb-fg-1);
+  --color-foreground-muted:  var(--sb-fg-2);
+  --color-muted-foreground:  var(--sb-fg-3);
+
+  /* ----- TEMA LIGHT (alternativa — comente o bloco acima primeiro) -----
+  --color-background:        var(--sb-bg-light);
+  --color-surface:           var(--sb-surface-light);
+  --color-surface-2:         var(--sb-surface-2-light);
+  --color-surface-3:         var(--sb-surface-3-light);
+  --color-border:            var(--sb-border-light);
+  --color-border-strong:     var(--sb-border-strong-light);
+  --color-foreground:        var(--sb-fg-1-light);
+  --color-foreground-muted:  var(--sb-fg-2-light);
+  --color-muted-foreground:  var(--sb-fg-3-light);
+  */
+
+  /* ============================================================
+     COR PRIMARY DO PRODUTO
+     Default: gold da casa. Troque se o produto exigir outra cor.
+     Mantenha em HSL stripado para suportar alpha (ex: bg-primary/50).
+     ============================================================ */
+  --color-primary:             var(--sb-gold-500);
+  --color-primary-foreground:  var(--sb-fg-on-brand);
+
+  /* ============================================================
+     STATUS (semantic — mesmo em todo produto)
+     ============================================================ */
+  --color-success: var(--sb-success);
+  --color-warning: var(--sb-warning);
+  --color-danger:  var(--sb-danger);
+  --color-info:    var(--sb-info);
+
+  /* ============================================================
+     DINHEIRO — REGRA DA CASA
+     KPIs e valores financeiros usam gold em todo produto, mesmo
+     quando --color-primary for trocado. Não altere.
+     ============================================================ */
+  --color-money: var(--sb-gold-400);
+
+  /* ============================================================
+     DNA DA CASA (espelho dos primitivos — não edite aqui)
+     ============================================================ */
+  --font-sans:    var(--sb-font-sans);
+  --font-mono:    var(--sb-font-mono);
+  --font-display: var(--sb-font-display);
+
+  --radius-sm:  var(--sb-radius-sm);
+  --radius-md:  var(--sb-radius-md);
+  --radius-lg:  var(--sb-radius-lg);
+  --radius-xl:  var(--sb-radius-xl);
+
+  --dur-fast:   var(--sb-dur-fast);
+  --dur-base:   var(--sb-dur-base);
+  --ease-out:   var(--sb-ease-out);
+}
