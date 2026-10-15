@@ -38,6 +38,8 @@ O agente não recebe segredos do produto: nenhum banco, nenhuma chave de cliente
 
 Sem permissão de Administration, Workflows ou Secrets.
 
+**2b. Alternativa ao App:** um token fino (Settings da sua conta → Developer settings → Personal access tokens → Fine-grained tokens) com *Resource owner* `SBTech-Group`, só os repos de produto, e permissões Contents e Pull requests em *Read and write*. Salve como secret `AGENTS_GH_TOKEN`. O workflow usa o App quando `AGENTS_APP_ID` e `AGENTS_APP_PRIVATE_KEY` existem; senão, este token. Os PRs aparecem em seu nome.
+
 **3. No repo SBAGENTS** (Settings → Secrets and variables → Actions):
 
 | Nome | Tipo | Valor |
