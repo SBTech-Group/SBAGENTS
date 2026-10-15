@@ -41,7 +41,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 45
     env:
-      AGENT_EVENTS_URL: ${{ vars.AGENT_EVENTS_URL }}
+      # Aceita como variável (recomendado) ou como secret.
+      AGENT_EVENTS_URL: ${{ vars.AGENT_EVENTS_URL || secrets.AGENT_EVENTS_URL }}
       AGENT_EVENTS_TOKEN: ${{ secrets.AGENT_EVENTS_TOKEN }}
       # Secrets não podem ir direto num `if`; esta flag diz se o App tem chave.
       TEM_CHAVE_APP: ${{ secrets.AGENTS_APP_PRIVATE_KEY != '' && 'sim' || 'nao' }}

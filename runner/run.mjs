@@ -55,11 +55,17 @@ function fail(msg) {
 
 // ── Eventos para o Hub ──────────────────────────────────────────────────────
 // Falha ao emitir nunca derruba a execução: o log do Actions continua sendo a fonte.
+let avisouSemHub = false
+
 async function emit(run, events = []) {
   if (['done', 'failed', 'pr_opened', 'cancelled', 'timeout'].includes(run.status)) {
     writeFileSync(STATE_FILE, JSON.stringify({ run_id: RUN_ID, produto_slug: PRODUTO, agente: AGENTE, ended: true }))
   }
-  if (!env.AGENT_EVENTS_URL || !env.AGENT_EVENTS_TOKEN) return
+  if (!env.AGENT_EVENTS_URL || !env.AGENT_EVENTS_TOKEN) {
+    if (!avisouSemHub) console.warn('::warning::AGENT_EVENTS_URL ou AGENT_EVENTS_TOKEN vazio: a execução não vai aparecer no Escritório.')
+    avisouSemHub = true
+    return
+  }
   const body = {
     run: { id: RUN_ID, produto_slug: PRODUTO, agente: AGENTE, ...run },
     events: events.map((e) => ({ id: randomUUID(), created_at: new Date().toISOString(), ...e })),
