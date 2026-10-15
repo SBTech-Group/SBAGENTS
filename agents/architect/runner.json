@@ -1,0 +1,19 @@
+{
+  "nome": "Arquiteto",
+  "modos": {
+    "diagnostico": {
+      "descricao": "Compara o repo com o playbook e escreve docs/diagnostico-<data>.md. Não altera código.",
+      "tarefa": "Rode o modo DIAGNÓSTICO neste repositório. O playbook está em ../SBAGENTS (somente leitura). Escreva só o relatório em docs/. Não faça commit; o runner cuida disso.",
+      "escreve_codigo": false,
+      "commit": "docs(arq): diagnóstico {data}",
+      "titulo_pr": "Diagnóstico de arquitetura {data}"
+    },
+    "adequacao": {
+      "descricao": "Corrige os achados aprovados, um commit por achado.",
+      "tarefa": "Rode o modo ADEQUAÇÃO neste repositório para os achados aprovados: {achados}. O branch de trabalho já foi criado a partir de hml; faça um commit por achado. Não faça push nem abra PR; o runner cuida disso. O playbook está em ../SBAGENTS (somente leitura).",
+      "escreve_codigo": true,
+      "exige": ["achados"],
+      "titulo_pr": "Adequação: {achados}"
+    }
+  }
+}

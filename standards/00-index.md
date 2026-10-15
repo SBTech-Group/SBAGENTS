@@ -12,11 +12,14 @@ Leia só o que a tarefa pede.
 | Identidade visual (duas camadas) | `arquitetura.md` | Identidade visual |
 | Branches, CI/CD, Coolify | `arquitetura.md` | CI/CD e branches |
 | Segredos e variáveis | `arquitetura.md` | Segredos e variáveis |
-| Provisionamento pelo Hub (`tenant-provision`, `tenant-modules`, `/welcome`) | `integracoes.md` | Integração com Hub |
-| WhatsApp | `contrato-integracao-produto.md` | Integrações transversais (via Hub, Meta). A seção Evolution de `integracoes.md` está obsoleta |
-| Mercado Pago (tenant cobrando os clientes dele) | `integracoes.md` | Mercado Pago |
+| Provisionamento pelo Hub (`tenant-provision`, `tenant-modules`, `/welcome`, cadastro saas) | `../integracoes/hub.md` | — |
+| WhatsApp (Meta, sempre pelo Hub) | `../integracoes/whatsapp-meta.md` | — |
+| Cobrança B2B (Hub/Asaas) e do consumidor final (Mercado Pago) | `../integracoes/pagamentos.md` | — |
+| Nota fiscal | `../integracoes/fiscal.md` | — |
+| E-mail (convite, transacional) | `../integracoes/email.md` | — |
+| Criar um produto novo, passo a passo | `../guias/novo-produto.md` | — |
+| Criar ou mudar um agente | `../agents/README.md` | — |
 | Conceitos do Hub (cliente, produto, plano, instância, integração) | `arquitetura-hub.md` | — |
-| Contrato produto ↔ Hub (provisionamento, módulos, integrações) | `contrato-integracao-produto.md` | — |
 | Modalidades `saas` e `multi-tenant` | `modalidades.md` | — |
 | Como os sistemas se conectam | `../architecture/sistemas.md` | — |
 

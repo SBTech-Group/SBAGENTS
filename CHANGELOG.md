@@ -1,5 +1,18 @@
 # Changelog do playbook
 
+## 0.5.0 — 2026-10-15
+
+- Novo `integracoes/`: um guia por integração no mesmo formato (resumo, arquitetura, endpoints, secrets, no produto, checklist, erros comuns, fonte), conferido contra o código do Hub e do ArenaHub HML:
+  - `hub.md` (provisionamento, módulos, cadastro saas, cadastro do produto no Hub; inclui a implementação de referência que estava em `standards/integracoes.md`);
+  - `whatsapp-meta.md` (ações de `hub-meta-tenant`, entrega em `whatsapp-webhook`, janela de 24 h, idempotência);
+  - `pagamentos.md` (B2B no Hub com Asaas; consumidor final no produto com Mercado Pago);
+  - `fiscal.md` (NFS-e manual no Hub) e `email.md` (Resend).
+- `standards/integracoes.md` e `standards/contrato-integracao-produto.md` viram páginas de redirecionamento. A cópia do contrato tinha os acentos corrompidos.
+- Novo agente `integrador` (modos `plano` e `implementacao`).
+- Agentes passam a declarar os modos em `agents/<agente>/runner.json`; o runner não precisa de código novo para agente novo. Novo `agents/README.md` com o passo a passo para criar um agente.
+- Novo `guias/novo-produto.md`: do zero ao primeiro cliente provisionado.
+- Workflow "Rodar agente": agente `integrador`, modos `plano`/`implementacao` e campo `integracao`. PR mostra o valor "equivalente na API" em vez de "custo".
+
 ## 0.4.0 — 2026-10-15
 
 - ADR 0002: dois branches fixos, `hml` (homologação) e `main` (produção). Agentes trabalham em `agente/<nome>/<assunto>` com PR para `hml`. Regra GIT-01, template de `AGENTS.md`, prompt do architect e seção de branches de `arquitetura.md` atualizados.

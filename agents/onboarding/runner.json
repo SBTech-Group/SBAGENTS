@@ -1,0 +1,12 @@
+{
+  "nome": "Onboarding",
+  "modos": {
+    "padrao": {
+      "descricao": "Gera ou atualiza AGENTS.md e CLAUDE.md. Não altera código.",
+      "tarefa": "Prepare este repositório para agentes: gere ou atualize AGENTS.md e CLAUDE.md conforme o template do SBAGENTS em ../SBAGENTS. Não altere código. Não faça commit; o runner cuida disso.",
+      "escreve_codigo": false,
+      "commit": "docs(agentes): AGENTS.md e CLAUDE.md",
+      "titulo_pr": "docs(agentes): AGENTS.md e CLAUDE.md"
+    }
+  }
+}

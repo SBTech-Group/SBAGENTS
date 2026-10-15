@@ -4,9 +4,9 @@ O workflow `.github/workflows/agent-run.yml` roda um agente num repo de produto 
 
 ## Fluxo
 
-1. Você dispara o workflow (Actions → "Rodar agente" → Run workflow) com repo, sala do produto, agente e modo.
+1. Você dispara o workflow (Actions → "Rodar agente" → Run workflow) com repo, sala do produto, agente, modo e, no integrador, a integração. Os agentes e modos disponíveis estão em `agents/README.md`; o runner lê os modos de cada agente em `agents/<agente>/runner.json`.
 2. O job pega um token do GitHub App válido só para o repo alvo, clona o SBAGENTS e o alvo (a partir de `hml`).
-3. `runner/run.mjs` cria o branch `agente/<agente>/<modo>-<data>-<id>`, avisa o Hub (`run.started`) e roda o Claude Code headless com o prompt do agente.
+3. `runner/run.mjs` cria o branch `agente/<agente>/<modo>[-<integracao>]-<data>-<id>`, avisa o Hub (`run.started`) e roda o Claude Code headless com o prompt do agente.
 4. Durante a execução, manda no máximo um evento de ferramenta a cada 20 s (`tool.used`).
 5. No fim: confere que nenhum caminho proibido foi tocado (`.github/workflows/`, `.env*`, chaves), empurra o branch, abre o PR para `hml` e marca a execução como `pr_opened` com custo e turnos. Sem alterações, marca `done`.
 6. Se o job morrer no meio (tempo, cancelamento), `runner/fail.mjs` marca a execução como falha.

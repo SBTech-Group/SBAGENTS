@@ -16,13 +16,18 @@ on:
       agente:
         description: "Agente"
         type: choice
-        options: [architect, onboarding]
+        options: [architect, onboarding, integrador]
         default: architect
       modo:
-        description: "Modo (onboarding ignora)"
+        description: "Modo. architect: diagnostico/adequacao · integrador: plano/implementacao · onboarding ignora"
         type: choice
-        options: [diagnostico, adequacao]
+        options: [diagnostico, adequacao, plano, implementacao]
         default: diagnostico
+      integracao:
+        description: "Só no integrador — guia de SBAGENTS/integracoes"
+        type: choice
+        options: [nenhuma, hub, whatsapp-meta, pagamentos, email]
+        default: nenhuma
       achados:
         description: "Só em adequação — IDs aprovados separados por vírgula (ex.: SEC-06-a,GIT-02-a)"
         required: false
@@ -97,6 +102,7 @@ jobs:
           AGENTE: ${{ inputs.agente }}
           MODO: ${{ inputs.modo }}
           ACHADOS: ${{ inputs.achados }}
+          INTEGRACAO: ${{ inputs.integracao }}
           PRODUTO_SLUG: ${{ inputs.produto_slug }}
           ALVO_REPO: ${{ inputs.repo }}
           AGENT_MAX_USD: ${{ vars.AGENT_MAX_USD || '5' }}

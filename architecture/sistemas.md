@@ -21,10 +21,12 @@ Os demais diretórios em `SB TECH` ainda não foram mapeados.
 
 | De → Para | Chamada | Autenticação | Fonte |
 |---|---|---|---|
-| Hub → produto | `POST /functions/v1/tenant-provision` | `Bearer {PRODUTO}_PROVISIONING_TOKEN` | `standards/contrato-integracao-produto.md` |
+| Hub → produto | `POST /functions/v1/tenant-provision` | `Bearer {PRODUTO}_PROVISIONING_TOKEN` | `integracoes/hub.md` |
 | Hub → produto | `GET /functions/v1/tenant-modules` | mesmo token | idem |
 | Produto → Hub | `POST hub-register-account` (cadastro de conta `saas`) | token do produto | Promobot `src/lib/hubProvisioning.ts` |
-| Produto → Hub | `hub-meta-tenant` (WhatsApp Meta da instância) | token do produto + instância provisionada | Hub `_shared/meta.ts > resolveScope` |
+| Produto → Hub | `hub-meta-tenant` (WhatsApp Meta da instância) | token do produto + instância provisionada | `integracoes/whatsapp-meta.md` |
+| Hub → produto | `POST /functions/v1/whatsapp-webhook` (mensagens e status recebidos) | token do produto | `integracoes/whatsapp-meta.md` |
+| Runner SBAGENTS → Hub | `hub-agent-events` (execuções dos agentes, Escritório) | header `x-agent-token` | `runner/README.md` |
 | Meta → Hub | `hub-meta-webhook` | assinatura da Meta | Hub `docs/META-WHATSAPP.md` |
 | Asaas → Hub | `hub-asaas-webhook` | header `asaas-access-token` | Hub |
 | Site → Hub | `hub-public-plans` (planos públicos) | aberto, só leitura | Hub |

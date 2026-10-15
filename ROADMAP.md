@@ -4,11 +4,12 @@
 |---|---|---|
 | 0 | Playbook, agentes `architect` e `onboarding`, diagnósticos de linha de base | Concluída em 2026-10-14 |
 | 1 | Bloqueantes corrigidos e `AGENTS.md` nos repos | **Concluída em 2026-10-15, com ressalva** (abaixo) |
-| 2 | Agentes rodando no GitHub Actions, com eventos de cada execução | Em andamento |
-| 3 | Tabelas `agent_runs` / `agent_events` no Hub e painel ligado a elas | Em andamento (junto com a 2) |
+| 2 | Agentes rodando no GitHub Actions, com eventos de cada execução | **Concluída em 2026-10-15**: primeira execução abriu o PR #9 no Admin Hub |
+| 3 | Tabelas `agent_runs` / `agent_events` no Hub e painel ligado a elas | **Concluída em 2026-10-15** |
 | 4 | Fila de entrada (Trello ou Issues) e aprovações (Slack) | A fazer |
-| 5 | "Novo produto" no Hub criando o repo (`architecture/novo-projeto-pelo-hub.md`) | Especificada |
-| 6 | Escritório 3D | Em andamento: módulo "Escritório" no Admin Hub, lendo `agent_events` |
+| 5 | "Novo produto" no Hub criando o repo (`architecture/novo-projeto-pelo-hub.md`) | Especificada. Enquanto isso: `guias/novo-produto.md` |
+| 6 | Escritório 3D | **No ar** desde 2026-10-15 (PR #7 do Admin Hub) |
+| 7 | Guias de integração e agente `integrador` | **Entregue** na 0.5.0. Próximo: rodar o integrador no Promobot (`hub`, `whatsapp-meta`) |
 
 ## Ressalva da Fase 1
 
@@ -21,3 +22,17 @@ Marcada como concluída por decisão do Guilherme em 2026-10-15. O código está
 - **Pendentes de correção:** Promobot SEC-06-a e SEC-06-b (funções que leem o JWT sem verificar ou sem autenticação), ArenaHub inteiro (aguarda o repo oficial na SBTech-Group).
 
 Até essas pendências fecharem, os diagnósticos continuam contando os bloqueantes como abertos.
+
+## Encontrado ao escrever os guias (0.5.0)
+
+Pontos do código real que divergem do padrão ou merecem atenção. Nenhum foi alterado.
+
+| Onde | O quê | Gravidade |
+|---|---|---|
+| Hub, `hub-check-vencimentos` | Sem o secret `HUB_CRON_SECRET`, a função aceita qualquer chamada e pode cancelar assinaturas vencidas | Alta: confirmar que o secret existe |
+| Hub, catálogo | `arena-hub` tem `provisioning_token_ref = "arenahub/provision-token"`, que não é um nome de secret no formato da casa (`ARENAHUB_PROVISIONING_TOKEN`). Confirmar se o provisionamento e o WhatsApp do ArenaHub funcionam | Alta |
+| Hub, catálogo | Promobot não está cadastrado no Hub deste projeto Supabase; `hub-register-account` responderia "Produto não encontrado" | Média |
+| ArenaHub HML | `HUB_PRODUCT_SLUG` tem padrão `arenahub`, mas o catálogo usa `arena-hub`. Precisa do secret configurado | Média |
+| ArenaHub HML | Um único `MERCADOPAGO_ACCESS_TOKEN` para todas as arenas: o dinheiro de todas cai na mesma conta. O desenho prevê conta por cliente | Alta (negócio) |
+| ArenaHub HML, `mercadopago-webhook` | Compara a assinatura sem tempo constante e escreve o hash esperado no log | Baixa |
+| Hub, `hub-register-account` | Compara o token sem tempo constante | Baixa |

@@ -18,11 +18,13 @@ Este repositório é o **playbook da SB Tech**: os padrões de arquitetura, as r
 | `standards/modalidades.md` | As duas modalidades de produto: `saas` e `multi-tenant` |
 | `standards/regras.md` | Regras com ID (SEC-01, MT-01…) — o que o arquiteto verifica |
 | `standards/arquitetura.md` | Arquitetura padrão dos produtos SaaS B2B (texto de referência) |
-| `standards/integracoes.md` | Integrações opt-in: Hub, Evolution, Mercado Pago |
+| `integracoes/` | Um guia por integração (Hub, WhatsApp Meta, pagamentos, fiscal, e-mail): endpoints, secrets, checklist |
+| `guias/novo-produto.md` | Passo a passo para criar um produto novo |
 | `architecture/sistemas.md` | Quais sistemas existem e como se conectam |
 | `architecture/novo-projeto-pelo-hub.md` | Especificação do "Novo produto" no Hub criando o repo |
 | `architecture/adr/` | Decisões globais |
-| `agents/` | Definição dos agentes (fonte). `tools/instalar-agentes.*` copia para o Claude Code |
+| `agents/` | Agentes: `prompt.md` (quem é) e `runner.json` (modos no servidor). Como criar: `agents/README.md` |
+| `runner/` e `.github/workflows/agent-run.yml` | Roda os agentes no GitHub Actions e manda os eventos ao Escritório do Hub |
 | `templates/` | Template de repo novo, de docs e prompts de bootstrap |
 | `diagnosticos/` | Diagnósticos de referência (linha de base e gabarito de avaliação) |
 

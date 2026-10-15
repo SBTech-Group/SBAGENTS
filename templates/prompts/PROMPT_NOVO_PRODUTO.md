@@ -190,11 +190,11 @@ Quando terminar, me reporte:
 1. **Lista de arquivos tocados** (criados/editados/copiados)
 2. **Comandos executados** com status
 3. **Próximos passos manuais** que eu preciso fazer:
-   - Criar projetos Supabase (staging + prod, sa-east-1)
+   - Criar projetos Supabase (hml + prd, sa-east-1)
    - Rodar `0001_core.sql` em ambos
    - Configurar wildcard DNS `*.{{DOMINIO_RAIZ}}`
-   - Subir serviços no Coolify (staging + prod)
-   - Configurar GitHub branch protection em `main` e `develop`
+   - Subir serviços no Coolify (`hml` → homologação, `main` → produção)
+   - Configurar GitHub branch protection em `main` e `hml` (ADR 0002)
    - Criar environment `production` no GitHub com revisor
    - Configurar secrets do GitHub (`COOLIFY_WEBHOOK_*`, `COOLIFY_TOKEN_*`)
    - Preencher `.env` com URLs e chaves do Supabase

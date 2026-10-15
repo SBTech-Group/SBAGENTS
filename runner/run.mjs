@@ -7,13 +7,13 @@
 // alimenta o Escritório. No fim, empurra um branch agente/<nome>/... e abre PR
 // para `hml` (ADR 0002). Nunca abre PR para `main`.
 //
-// Variáveis: AGENTE, MODO, ACHADOS, PRODUTO_SLUG, ALVO_REPO, CLAUDE_CODE_OAUTH_TOKEN ou ANTHROPIC_API_KEY,
+// Variáveis: AGENTE, MODO, ACHADOS, INTEGRACAO, PRODUTO_SLUG, ALVO_REPO, CLAUDE_CODE_OAUTH_TOKEN ou ANTHROPIC_API_KEY,
 // AGENT_EVENTS_URL, AGENT_EVENTS_TOKEN, GH_TOKEN, AGENT_MAX_USD (padrão 5),
 // AGENT_MAX_TURNS (padrão 80).
 
 import { spawn, execFileSync } from 'node:child_process'
 import { randomUUID } from 'node:crypto'
-import { readFileSync, writeFileSync } from 'node:fs'
+import { existsSync, readFileSync, writeFileSync } from 'node:fs'
 import { join, resolve } from 'node:path'
 import { createInterface } from 'node:readline'
 
@@ -26,8 +26,8 @@ if (!env.ANTHROPIC_API_KEY && !env.CLAUDE_CODE_OAUTH_TOKEN) {
   process.exit(1)
 }
 const AGENTE = env.AGENTE || 'architect'
-const MODO = env.MODO || 'diagnostico'
 const ACHADOS = (env.ACHADOS || '').split(',').map((s) => s.trim()).filter(Boolean)
+const INTEGRACAO = (env.INTEGRACAO || '').trim().replace(/^nenhuma$/, '')
 const PRODUTO = env.PRODUTO_SLUG
 const ALVO_REPO = env.ALVO_REPO
 const ROOT = resolve('.')
@@ -37,15 +37,35 @@ const STATE_FILE = join(ROOT, 'runner-state.json')
 const LOG_URL = `${env.GITHUB_SERVER_URL}/${env.GITHUB_REPOSITORY}/actions/runs/${env.GITHUB_RUN_ID}`
 const RUN_ID = randomUUID()
 const STAMP = new Date().toISOString().slice(0, 10)
-const BRANCH = `agente/${AGENTE}/${MODO}-${STAMP}-${RUN_ID.slice(0, 6)}`
+
+// Cada agente descreve os próprios modos em agents/<agente>/runner.json (ver agents/README.md).
+if (!/^[a-z][a-z0-9-]{0,40}$/.test(AGENTE)) fail(`Nome de agente inválido: ${AGENTE}`)
+let CONFIG
+try {
+  CONFIG = JSON.parse(readFileSync(join(PLAYBOOK, 'agents', AGENTE, 'runner.json'), 'utf8'))
+} catch {
+  fail(`Agente desconhecido: ${AGENTE} (falta agents/${AGENTE}/runner.json)`)
+}
+const MODOS = Object.keys(CONFIG.modos || {})
+// Agente com um só modo ignora o modo escolhido no formulário.
+const MODO = MODOS.length === 1 ? MODOS[0] : (env.MODO || MODOS[0])
+const SPEC = CONFIG.modos?.[MODO]
+if (!SPEC) fail(`O agente ${AGENTE} não tem o modo "${MODO}". Modos: ${MODOS.join(', ')}`)
+const PARAMS = { data: STAMP, achados: ACHADOS.join(', '), integracao: INTEGRACAO }
+const fill = (t) => String(t || '').replace(/\{(\w+)\}/g, (_, k) => PARAMS[k] ?? '')
+const BRANCH = `agente/${AGENTE}/${MODO}${INTEGRACAO ? `-${INTEGRACAO}` : ''}-${STAMP}-${RUN_ID.slice(0, 6)}`
 
 // Caminhos que um agente nunca pode alterar (checados antes do push).
 const PROIBIDOS = [/^\.github\/workflows\//, /(^|\/)\.env($|\.)/, /\.(pem|key|p12|pfx)$/]
 
 if (!PRODUTO || !ALVO_REPO) fail('PRODUTO_SLUG e ALVO_REPO são obrigatórios.')
-if (!['architect', 'onboarding'].includes(AGENTE)) fail(`Agente desconhecido: ${AGENTE}`)
-if (!['diagnostico', 'adequacao'].includes(MODO)) fail(`Modo desconhecido: ${MODO}`)
-if (MODO === 'adequacao' && !ACHADOS.length) fail('Modo adequação exige a lista de achados aprovados.')
+for (const req of SPEC.exige || []) {
+  if (req === 'achados' && !ACHADOS.length) fail(`O modo ${MODO} exige a lista de achados aprovados.`)
+  if (req === 'integracao') {
+    if (!/^[a-z0-9-]+$/.test(INTEGRACAO)) fail(`O modo ${MODO} exige o campo integração.`)
+    if (!existsSync(join(PLAYBOOK, 'integracoes', `${INTEGRACAO}.md`))) fail(`Integração sem guia: integracoes/${INTEGRACAO}.md`)
+  }
+}
 writeFileSync(STATE_FILE, JSON.stringify({ run_id: RUN_ID, produto_slug: PRODUTO, agente: AGENTE }))
 
 function fail(msg) {
@@ -93,18 +113,12 @@ function agentPrompt() {
 }
 
 function taskText() {
-  if (AGENTE === 'onboarding') {
-    return 'Prepare este repositório para agentes: gere ou atualize AGENTS.md e CLAUDE.md conforme o template do SBAGENTS em ../SBAGENTS. Não altere código. Não faça commit; o runner cuida disso.'
-  }
-  if (MODO === 'diagnostico') {
-    return 'Rode o modo DIAGNÓSTICO neste repositório. O playbook está em ../SBAGENTS (somente leitura). Escreva só o relatório em docs/. Não faça commit; o runner cuida disso.'
-  }
-  return `Rode o modo ADEQUAÇÃO neste repositório para os achados aprovados: ${ACHADOS.join(', ')}. O branch de trabalho já foi criado a partir de hml; faça um commit por achado. Não faça push nem abra PR; o runner cuida disso. O playbook está em ../SBAGENTS (somente leitura).`
+  return fill(SPEC.tarefa)
 }
 
 function allowedTools() {
   const base = ['Read', 'Grep', 'Glob', 'Write', 'Edit', 'Bash(git status*)', 'Bash(git diff*)', 'Bash(git log*)', 'Bash(git ls-files*)', 'Bash(ls *)', 'Bash(wc *)']
-  if (MODO === 'adequacao') base.push('Bash(git add *)', 'Bash(git commit *)', 'Bash(git restore *)', 'Bash(git reset --soft *)', 'Bash(npm ci*)', 'Bash(npm run *)')
+  if (SPEC.escreve_codigo) base.push('Bash(git add *)', 'Bash(git commit *)', 'Bash(git restore *)', 'Bash(git reset --soft *)', 'Bash(npm ci*)', 'Bash(npm run *)')
   return base
 }
 
@@ -156,7 +170,7 @@ async function main() {
   git('switch', '-c', BRANCH)
   await emit(
     { status: 'running', modo: MODO, repo: ALVO_REPO, branch: BRANCH, log_url: LOG_URL, started_at: new Date().toISOString() },
-    [{ tipo: 'run.started', mensagem: `${AGENTE} começou ${MODO === 'adequacao' ? `a adequação (${ACHADOS.join(', ')})` : MODO} em ${ALVO_REPO}` }],
+    [{ tipo: 'run.started', mensagem: `${CONFIG.nome || AGENTE} começou ${MODO}${INTEGRACAO ? ` (${INTEGRACAO})` : ''}${ACHADOS.length ? ` (${ACHADOS.join(', ')})` : ''} em ${ALVO_REPO}` }],
   )
 
   const { code, result } = await runAgent()
@@ -172,12 +186,12 @@ async function main() {
     process.exit(1)
   }
 
-  // Diagnóstico e onboarding: o runner commita o que o agente escreveu.
-  if (MODO === 'diagnostico' || AGENTE === 'onboarding') {
+  // Modos que só escrevem documento: o runner commita o que o agente escreveu.
+  if (!SPEC.escreve_codigo) {
     git('add', '-A')
     if (git('status', '--porcelain')) {
       git('-c', 'user.name=sbagents[bot]', '-c', 'user.email=agents@sbtech-group.com', 'commit', '-m',
-        `${AGENTE === 'onboarding' ? 'docs(agentes): AGENTS.md e CLAUDE.md' : `docs(arq): diagnóstico ${STAMP}`}\n\nGerado pelo agente ${AGENTE} (SBAGENTS). Execução: ${LOG_URL}`)
+        `${fill(SPEC.commit) || `docs: ${AGENTE} ${MODO}`}\n\nGerado pelo agente ${AGENTE} (SBAGENTS). Execução: ${LOG_URL}`)
     }
   }
 
@@ -199,10 +213,8 @@ async function main() {
   }
 
   git('push', 'origin', `HEAD:refs/heads/${BRANCH}`)
-  const title = AGENTE === 'onboarding'
-    ? 'docs(agentes): AGENTS.md e CLAUDE.md'
-    : MODO === 'diagnostico' ? `Diagnóstico de arquitetura ${STAMP}` : `Adequação: ${ACHADOS.join(', ')}`
-  const prBody = `${resumo ?? ''}\n\n---\nAberto pelo agente \`${AGENTE}\` (SBAGENTS). Execução: ${LOG_URL}\nCusto estimado: US$ ${custo.toFixed(2)} · ${turnos} turnos.`
+  const title = fill(SPEC.titulo_pr) || `${AGENTE}: ${MODO}`
+  const prBody = `${resumo ?? ''}\n\n---\nAberto pelo agente \`${AGENTE}\` (SBAGENTS). Execução: ${LOG_URL}\nEquivalente na API: US$ ${custo.toFixed(2)} (com a assinatura, não é cobrado) · ${turnos} turnos.`
   const prUrl = execFileSync('gh', ['pr', 'create', '--repo', ALVO_REPO, '--base', 'hml', '--head', BRANCH, '--title', title, '--body', prBody], { cwd: ALVO, encoding: 'utf8' }).trim()
 
   await emit(

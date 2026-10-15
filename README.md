@@ -1,36 +1,40 @@
 # SBAGENTS
 
-Playbook da SB Tech: padrões, agentes e templates de todos os produtos.
+Playbook da SB Tech: como todo produto da casa é construído, integrado e mantido, e os agentes de IA que ajudam nisso. É a fonte única: os repos de produto apontam para cá.
 
-## Uso rápido (Windows)
+## Por onde começar
 
-1. Instale os agentes no seu Claude Code (uma vez, e de novo sempre que `agents/` mudar):
+| Quero… | Leia |
+|---|---|
+| Criar um produto novo | [`guias/novo-produto.md`](guias/novo-produto.md) |
+| Integrar um produto ao Hub, ao WhatsApp, a pagamentos ou e-mail | [`integracoes/`](integracoes/README.md) |
+| Saber as regras que todo produto segue | [`standards/00-index.md`](standards/00-index.md) e [`standards/regras.md`](standards/regras.md) |
+| Escolher entre `saas` e `multi-tenant` | [`standards/modalidades.md`](standards/modalidades.md) |
+| Ver como os sistemas se conectam | [`architecture/sistemas.md`](architecture/sistemas.md) |
+| Rodar, criar ou mudar um agente | [`agents/README.md`](agents/README.md) e [`runner/README.md`](runner/README.md) |
+| Ver o que vem por aí | [`ROADMAP.md`](ROADMAP.md) |
 
-   ```powershell
-   cd "C:\Projetos\SB TECH\SBAGENTS"
-   powershell -ExecutionPolicy Bypass -File tools\instalar-agentes.ps1
-   ```
+## Rodar um agente (servidor)
 
-2. Diagnostique um produto. Abra o terminal **na pasta do produto**:
+Neste repo: **Actions → Rodar agente → Run workflow**. Escolha o repo, a sala no Escritório, o agente e o modo. O resultado é sempre um PR para `hml` no repo do produto, e a execução aparece ao vivo no Escritório do Admin Hub.
 
-   ```powershell
-   cd "C:\Projetos\SB TECH\ArenaHub - HML"
-   claude --add-dir ..\SBAGENTS
-   ```
+| Agente | Para |
+|---|---|
+| `architect` | "Está no padrão?" (`diagnostico`) e corrigir o que foi aprovado (`adequacao`) |
+| `onboarding` | Gerar `AGENTS.md` e `CLAUDE.md` de um repo |
+| `integrador` | Ligar o produto a uma integração (`plano`, depois `implementacao`) |
 
-   E peça: `Use o subagente architect em modo DIAGNÓSTICO.`
+## Rodar um agente (seu Claude Code)
 
-   O resultado sai em `docs/diagnostico-AAAA-MM-DD.md` do produto. Nada mais é alterado.
+```powershell
+cd "C:\Projetos\SB TECH\SBAGENTS"
+powershell -ExecutionPolicy Bypass -File tools\instalar-agentes.ps1
+cd "..\<pasta do produto>"
+claude --add-dir ..\SBAGENTS
+```
 
-3. Revise o diagnóstico. Marque os achados que aprova e peça:
-   `Use o subagente architect em modo ADEQUAÇÃO para os achados SEC-01-a, MT-02-b.`
-
-   Ele cria um branch, faz um commit por achado e roda build/testes. O PR quem abre é você.
-
-## Produto sem AGENTS.md
-
-Peça primeiro `Use o subagente onboarding.` Ele lê o repo e gera o rascunho de `AGENTS.md` e `CLAUDE.md` no formato do template.
+E peça, por exemplo: `Use o subagente architect em modo DIAGNÓSTICO.`
 
 ## Mudar o padrão
 
-Edite em `standards/`, suba `VERSION`, registre em `CHANGELOG.md`. Veja `AGENTS.md`.
+Edite, suba `VERSION`, registre em `CHANGELOG.md`. Regras para quem edita: [`AGENTS.md`](AGENTS.md).

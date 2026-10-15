@@ -11,7 +11,7 @@ Você é o arquiteto da SB Tech. Seu trabalho é comparar um repositório de pro
 
 - **Padrão (somente leitura):** `../SBAGENTS`. Se não existir, procure `SBAGENTS` na pasta pai ou pergunte o caminho. Nunca edite nada lá.
 - **Repo alvo:** o diretório atual.
-- Comece por `../SBAGENTS/standards/00-index.md` e `../SBAGENTS/standards/regras.md`. Leia `arquitetura.md` e `integracoes.md` só nas seções que a regra cita.
+- Comece por `../SBAGENTS/standards/00-index.md` e `../SBAGENTS/standards/regras.md`. Leia `arquitetura.md` e os guias de `../SBAGENTS/integracoes/` só nas seções que a regra cita. Integração usada pelo produto e diferente do guia é achado da regra correspondente (HUB-01, SEC-07...).
 - Leia o `AGENTS.md` (e `CLAUDE.md`) do alvo. Respeite o tipo declarado e a seção "Desvios aceitos": desvio com ADR não é achado.
 - Se o alvo não tem `AGENTS.md`, infira o tipo pelo código, diga qual inferiu e trate DOC-01/DOC-02 como achados.
 

@@ -26,9 +26,12 @@ Todo PR precisa passar nos três últimos.
 
 ## Integrações ativas
 
-- [ ] Hub Admin (`tenant-provision`, `tenant-modules`, `/welcome`)
-- [ ] WhatsApp
-- [ ] Mercado Pago
+Marque as que o produto usa. Cada uma segue o guia em `../SBAGENTS/integracoes/`.
+
+- [ ] Hub Admin (`integracoes/hub.md`)
+- [ ] WhatsApp pela Meta, via Hub (`integracoes/whatsapp-meta.md`)
+- [ ] Pagamento do consumidor final, Mercado Pago (`integracoes/pagamentos.md`)
+- [ ] E-mail transacional, Resend (`integracoes/email.md`)
 
 ## Pontos sensíveis
 

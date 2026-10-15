@@ -1,0 +1,20 @@
+{
+  "nome": "Integrador",
+  "modos": {
+    "plano": {
+      "descricao": "Lê o guia da integração e o repo e escreve docs/integracao-<integracao>.md com o que falta. Não altera código.",
+      "tarefa": "Rode o modo PLANO para a integração '{integracao}'. O guia é ../SBAGENTS/integracoes/{integracao}.md. Escreva só docs/integracao-{integracao}.md. Não faça commit; o runner cuida disso.",
+      "escreve_codigo": false,
+      "exige": ["integracao"],
+      "commit": "docs(integracao): plano {integracao}",
+      "titulo_pr": "Plano de integração: {integracao}"
+    },
+    "implementacao": {
+      "descricao": "Implementa a integração seguindo o guia, um commit por etapa.",
+      "tarefa": "Rode o modo IMPLEMENTAÇÃO para a integração '{integracao}'. O guia é ../SBAGENTS/integracoes/{integracao}.md. O branch de trabalho já foi criado a partir de hml; faça um commit por etapa. Não faça push nem abra PR; o runner cuida disso.",
+      "escreve_codigo": true,
+      "exige": ["integracao"],
+      "titulo_pr": "Integração: {integracao}"
+    }
+  }
+}
