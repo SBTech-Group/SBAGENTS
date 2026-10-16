@@ -1,5 +1,10 @@
 # Changelog do playbook
 
+## 0.6.1 — 2026-10-16
+
+- Correção de texto: o "Novo produto" do Hub passa a criar também o projeto no Coolify (dois environments, um app em cada, sem deploy; Admin Hub PR #16). `guias/novo-produto.md` (passo 5) e `architecture/novo-projeto-pelo-hub.md` deixam de dizer que o Coolify é manual.
+- Documenta a Sentinela (`hub-log-watch`, sem IA): erros de log, deploy falho e app parado dos dois ambientes viram cards em Tarefas do Hub. Nenhuma regra nova em `standards/regras.md`.
+
 ## 0.6.0 — 2026-10-15
 
 - Fase 5: **Novo produto** no Hub cria o repositório a partir de `template-multitenant` ou `template-saas` (Admin Hub, PR #12). `architecture/novo-projeto-pelo-hub.md` passa a "implementado"; `guias/novo-produto.md` atualizado.

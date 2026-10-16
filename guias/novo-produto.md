@@ -51,12 +51,24 @@ Identidade visual não é opcional: `src/styles/sb-tech-base.css` idêntico ao d
    - os da integração escolhida, conforme o guia.
 5. Publique as funções: `supabase functions deploy` (as públicas com `--no-verify-jwt` só quando o guia manda).
 
-## 5. Coolify (você, 15 min)
+## 5. Coolify (o Hub cria; você preenche e faz o deploy, 5 min)
 
-1. Duas aplicações a partir do repo: homologação no branch `hml`, produção no `main`.
-2. Variáveis de build: só `VITE_SUPABASE_URL` e `VITE_SUPABASE_ANON_KEY`. **Nenhum token** com `VITE_` (SEC-01).
-3. Domínios: o de homologação (`<slug>-hlg.sbtech-group.com` ou subdomínio de teste) e o de produção. No multi-tenant, o wildcard `*.<dominio>` no DNS e no Coolify.
-4. Merge em `hml` publica homologação; PR de `hml` para `main` publica produção.
+O Hub cria no Coolify, junto com o repo, um projeto com dois environments, cada um com um servidor e um branch, e um app em cada, **sem deploy**:
+
+| Environment | Servidor | Branch | Domínio |
+|---|---|---|---|
+| `homologação` | Homologação | `hml` | `<slug>-hlg.sbtech-group.com` |
+| `produção` | Produção | `main` | `<slug>.sbtech-group.com` |
+
+Se a criação falhar ou os secrets do Hub não estiverem configurados, a tela do produto explica o motivo e tem o botão "Criar ambientes" (idempotente: continua de onde parou).
+
+1. Variáveis de build, **nos dois environments**: `VITE_SUPABASE_URL` e `VITE_SUPABASE_ANON_KEY`, cada um com o Supabase do seu ambiente. **Nenhum token** com `VITE_` (SEC-01).
+2. DNS: apontar cada domínio para o servidor do ambiente. No multi-tenant, o wildcard `*.<dominio>` no DNS e no Coolify.
+3. Conferir que a fonte GitHub do Coolify enxerga o repo novo (se ela não estiver em "All repositories").
+4. Primeiro deploy: botão "Deploy" de cada ambiente na tela do produto (pede confirmação).
+5. Depois: merge em `hml` publica homologação; PR de `hml` para `main` publica produção.
+
+A Sentinela (`hub-log-watch` no Admin Hub) passa a vigiar os dois ambientes: erro nos logs, deploy falho e app parado viram cards em Tarefas, ligados ao produto.
 
 ## 6. Cadastro no Hub (você, 10 min)
 
