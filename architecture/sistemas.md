@@ -26,6 +26,8 @@ Os demais diretórios em `SB TECH` ainda não foram mapeados.
 | Produto → Hub | `POST hub-register-account` (cadastro de conta `saas`) | token do produto | Promobot `src/lib/hubProvisioning.ts` |
 | Produto → Hub | `hub-meta-tenant` (WhatsApp Meta da instância) | token do produto + instância provisionada | `integracoes/whatsapp-meta.md` |
 | Hub → produto | `POST /functions/v1/whatsapp-webhook` (mensagens e status recebidos) | token do produto | `integracoes/whatsapp-meta.md` |
+| Agendador → Hub | `hub-log-watch` (Sentinela: logs, deploy e status dos dois environments do Coolify viram cards em Tarefas) | header `x-cron-secret` ou operador do Hub | Hub `AGENTS.md` |
+| Hub → Coolify | `hub-create-project` (projeto, environments, apps, deploy) e `hub-log-watch` (leitura) | tokens `COOLIFY_API_TOKEN` e `COOLIFY_READ_TOKEN` nos secrets do Hub | `guias/novo-produto.md` |
 | Runner SBAGENTS → Hub | `hub-agent-events` (execuções dos agentes, Escritório) | header `x-agent-token` | `runner/README.md` |
 | Meta → Hub | `hub-meta-webhook` | assinatura da Meta | Hub `docs/META-WHATSAPP.md` |
 | Asaas → Hub | `hub-asaas-webhook` | header `asaas-access-token` | Hub |
