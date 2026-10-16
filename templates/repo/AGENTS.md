@@ -1,7 +1,7 @@
 # <Produto> — instruções para agentes
 
 - Tipo: `multi-tenant` | `saas` | `interno` | `servico`
-- Segue: SBAGENTS v<versão atual: ver `../SBAGENTS/VERSION`> (padrões em `../SBAGENTS/standards/00-index.md`, somente leitura)
+- Segue: SBAGENTS v0.6.2 (padrões em `../SBAGENTS/standards/00-index.md`, somente leitura)
 - Branches: `hml` (homologação, recebe os PRs) · `main` (produção, só recebe PR de `hml`). Agentes trabalham em `agente/<nome>/<assunto>`.
 
 ## O que este sistema faz

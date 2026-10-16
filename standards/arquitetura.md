@@ -334,7 +334,7 @@ Em dev local, usar `VITE_DEV_TENANT_SLUG` no `.env` como fallback.
 
 ### Coolify: um projeto por produto, dois environments
 
-No Coolify a hierarquia é Projeto → Environment → Aplicação, e o servidor é escolhido por aplicação. Todo produto segue o mesmo desenho (o "Novo produto" do Hub cria tudo, sem deploy; `guias/novo-produto.md`, passo 5):
+No Coolify a hierarquia é Projeto → Environment → Aplicação, e o servidor é escolhido por aplicação. É assim que o "Novo produto" do Hub monta cada produto hoje, sem deploy (`guias/novo-produto.md`, passo 5). É descrição da implementação, não regra verificável (não há ID em `regras.md`); produtos anteriores ao Hub podem estar diferentes:
 
 | Environment | Servidor | Branch | Domínio | App |
 |---|---|---|---|---|
@@ -342,7 +342,7 @@ No Coolify a hierarquia é Projeto → Environment → Aplicação, e o servidor
 | `produção` | Produção | `main` | `<slug>.sbtech-group.com` | `<Produto> - PRD` |
 
 - Projeto com nome `<Produto> (<slug>)`. Perfil de cada app: Nixpacks, publica `/dist`, porta 3000, `NIXPACKS_NODE_VERSION`.
-- As variáveis `VITE_SUPABASE_*` são manuais por ambiente (cada ambiente tem o seu projeto Supabase). O deploy é manual e confirmado, e só acontece depois delas.
+- As variáveis `VITE_SUPABASE_*` são manuais por ambiente (cada ambiente tem o seu projeto Supabase). O primeiro deploy é manual e confirmado, e só acontece depois delas; os deploys seguintes seguem o CI/CD abaixo.
 - Os uuids dos dois apps ficam em `produtos.coolify_*` no Hub. É por eles que a Sentinela lê os logs.
 - O repositório precisa ter os dois branches (`hml` e `main`) antes do primeiro deploy: o Coolify falha com "Remote branch not found" se faltar um.
 
