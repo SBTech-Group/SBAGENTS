@@ -29,12 +29,13 @@ No Hub, "Novo produto" + escolha da modalidade (`saas` ou `multi-tenant`) entreg
    2. faz um commit com os arquivos gerados: `AGENTS.md` (do `SBAGENTS/templates/repo`, com tipo, módulos, integrações e versão do SBAGENTS), `CLAUDE.md`, `.env.example`, `.claude/agents/*.md` (cópia dos agentes do SBAGENTS, marcada com a versão);
    3. aplica proteção na `main` (PR obrigatório, CI verde);
    4. grava em `produtos`: `modelo` (`saas` ou `tenant`, coluna que já existe), `repo_url`, `playbook_version`, status `criado`;
-   5. registra em `eventos_auditoria`.
+   5. registra em `eventos_auditoria`;
+   6. cria no Coolify o projeto com os environments `homologação` (servidor Homologação, branch `hml`) e `produção` (servidor Produção, branch `main`) e um app em cada, **sem deploy** (as variáveis do Supabase do produto ainda não existem). Falha aqui não desfaz o repo; a tela oferece "Criar ambientes".
 4. A tela mostra o link do repo e o checklist do que continua manual.
 
 ## O que continua manual (por enquanto)
 
-Projetos Supabase (staging e produção), serviços no Coolify, DNS e segredos. São os passos da Fase 5 do `PROMPT_NOVO_PRODUTO.md`. Podem ser automatizados depois pelas APIs do Supabase e do Coolify.
+Projetos Supabase (staging e produção), DNS, segredos e as variáveis `VITE_SUPABASE_*` dos dois ambientes do Coolify. O Coolify em si (projeto, environments e apps) o Hub já cria; o primeiro deploy é um botão com confirmação. Os projetos Supabase podem ser automatizados depois pela API do Supabase.
 
 ## Pré-requisitos
 
