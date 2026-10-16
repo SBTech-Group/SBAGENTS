@@ -1,5 +1,10 @@
 # Changelog do playbook
 
+## 0.6.2 — 2026-10-16
+
+- Correção de texto: `standards/arquitetura.md` documenta o desenho do Coolify (projeto por produto, environments `homologação`/`produção`, servidor, branch e domínio de cada) e a Sentinela. O repo precisa ter `hml` e `main` antes do primeiro deploy.
+- `templates/repo/AGENTS.md` ganha a seção "Ambientes" e deixa de fixar a versão do SBAGENTS; `architecture/sistemas.md` lista `hub-log-watch` e o Hub → Coolify. Nenhuma regra nova.
+
 ## 0.6.1 — 2026-10-16
 
 - Correção de texto: o "Novo produto" do Hub passa a criar também o projeto no Coolify (dois environments, um app em cada, sem deploy; Admin Hub PR #16). `guias/novo-produto.md` (passo 5) e `architecture/novo-projeto-pelo-hub.md` deixam de dizer que o Coolify é manual.

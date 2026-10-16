@@ -332,6 +332,24 @@ Em dev local, usar `VITE_DEV_TENANT_SLUG` no `.env` como fallback.
 | Acesso | Equipe interna | Clientes reais |
 | SSL | Opcional | Obrigatório (wildcard) |
 
+### Coolify: um projeto por produto, dois environments
+
+No Coolify a hierarquia é Projeto → Environment → Aplicação, e o servidor é escolhido por aplicação. Todo produto segue o mesmo desenho (o "Novo produto" do Hub cria tudo, sem deploy; `guias/novo-produto.md`, passo 5):
+
+| Environment | Servidor | Branch | Domínio | App |
+|---|---|---|---|---|
+| `homologação` | Homologação | `hml` | `<slug>-hlg.sbtech-group.com` | `<Produto> - HML` |
+| `produção` | Produção | `main` | `<slug>.sbtech-group.com` | `<Produto> - PRD` |
+
+- Projeto com nome `<Produto> (<slug>)`. Perfil de cada app: Nixpacks, publica `/dist`, porta 3000, `NIXPACKS_NODE_VERSION`.
+- As variáveis `VITE_SUPABASE_*` são manuais por ambiente (cada ambiente tem o seu projeto Supabase). O deploy é manual e confirmado, e só acontece depois delas.
+- Os uuids dos dois apps ficam em `produtos.coolify_*` no Hub. É por eles que a Sentinela lê os logs.
+- O repositório precisa ter os dois branches (`hml` e `main`) antes do primeiro deploy: o Coolify falha com "Remote branch not found" se faltar um.
+
+### Sentinela (leitura de logs)
+
+`hub-log-watch` (sem IA, a cada 10 min) lê os dois environments de cada produto: erros nos logs, deploy falho e app parado. Cada problema vira um card em Tarefas do Hub (`origem = 'sentinela'`, com produto e ambiente); erro repetido atualiza o mesmo card. Texto de log passa por redação de segredos antes de virar card. Quem trata o card é uma pessoa ou um agente, nunca a própria Sentinela.
+
 ### Variáveis de ambiente
 
 No Coolify, cada serviço tem env vars próprias. Nunca compartilhar chaves entre staging e prod.
