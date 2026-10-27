@@ -11,7 +11,7 @@
     },
     "implementacao": {
       "descricao": "Implementa a integração seguindo o guia, um commit por etapa.",
-      "tarefa": "Rode o modo IMPLEMENTAÇÃO para a integração '{integracao}'. O guia é ../SBAGENTS/integracoes/{integracao}.md. O branch de trabalho já foi criado a partir de hml; faça um commit por etapa. Não faça push nem abra PR; o runner cuida disso.",
+      "tarefa": "Rode o modo IMPLEMENTAÇÃO para a integração '{integracao}'. O guia é ../SBAGENTS/integracoes/{integracao}.md. O branch de trabalho já foi criado a partir de staging; faça um commit por etapa. Não faça push nem abra PR; o runner cuida disso.",
       "escreve_codigo": true,
       "exige": ["integracao"],
       "titulo_pr": "Integração: {integracao}"

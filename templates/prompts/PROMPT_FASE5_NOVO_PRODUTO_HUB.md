@@ -4,7 +4,7 @@
 >
 > ```powershell
 > cd "C:\Projetos\SB TECH\Admin Hub"
-> git switch hml; git pull
+> git switch staging; git pull
 > claude --add-dir ..\SBAGENTS
 > ```
 >
@@ -12,7 +12,7 @@
 
 ---
 
-Você vai implementar a Fase 5 do roadmap da SB Tech: no Admin Hub, o operador clica em **Novo produto**, escolhe a modalidade (`saas` ou `multi-tenant`) e recebe um repositório no GitHub da organização `SBTech-Group` já pronto, com código base da modalidade, identidade visual SB Tech, `AGENTS.md` preenchido, CI, branches `hml`/`main` protegidos e acesso dos agentes. O produto fica registrado no Hub.
+Você vai implementar a Fase 5 do roadmap da SB Tech: no Admin Hub, o operador clica em **Novo produto**, escolhe a modalidade (`saas` ou `multi-tenant`) e recebe um repositório no GitHub da organização `SBTech-Group` já pronto, com código base da modalidade, identidade visual SB Tech, `AGENTS.md` preenchido, CI, branches `staging`/`main` protegidos e acesso dos agentes. O produto fica registrado no Hub.
 
 ## Leia antes de qualquer coisa
 
@@ -60,8 +60,8 @@ Se a pasta `Template Saas` não tiver algo necessário, pare e me diga o que fal
    - passos, cada um **idempotente** (se o repo já existe, segue do ponto onde parou):
      1. `POST /repos/SBTech-Group/template-<modalidade>/generate` → `SBTech-Group/<slug>`, privado, `include_all_branches: false`;
      2. preenche e commita (Contents API) `AGENTS.md`, `CLAUDE.md` e `.env.example`, com tipo, módulos, integrações e a versão atual do SBAGENTS (`VERSION`);
-     3. cria o branch `hml` a partir de `main`;
-     4. protege `main` e `hml`: PR obrigatório, CI (`verify`) obrigatório, sem push direto;
+     3. cria o branch `staging` a partir de `main`;
+     4. protege `main` e `staging`: PR obrigatório, CI (`verify`) obrigatório, sem push direto;
      5. garante que o App **SBTech-Agents** alcança o repo novo. Um App não consegue se adicionar a um repo; se o SBTech-Agents estiver instalado em "Only select repositories", proponha instalá-lo em "All repositories" ou inclua este passo no checklist manual;
    - a cada passo atualiza `produtos.repo_status` / `repo_erro` e grava em `eventos_auditoria` (`produto.repo_criado`, `produto.repo_falhou`);
    - nunca apaga repo existente; em falha, para e registra.
@@ -81,9 +81,9 @@ Ao final, proponha (sem aplicar) as mudanças no SBAGENTS: `architecture/novo-pr
 ## Como trabalhar
 
 1. **Primeiro, só o plano.** Leia tudo acima, confira o estado atual no código e me mostre: arquivos a criar e mudar, a migration, a lista de permissões do GitHub App novo, riscos e perguntas. Não escreva código antes do meu OK.
-2. Branch `agente/architect/fase5-novo-produto` a partir de `hml`. Um commit por etapa (`feat(produtos): ...`, `feat(hub-create-project): ...`).
+2. Branch `agente/architect/fase5-novo-produto` a partir de `staging`. Um commit por etapa (`feat(produtos): ...`, `feat(hub-create-project): ...`).
 3. Depois de cada etapa: `npm run typecheck && npm run build` e `deno test --allow-env --no-lock supabase/functions/_shared`.
-4. PR para `hml`, nunca para `main`.
+4. PR para `staging`, nunca para `main`.
 
 ## O que eu faço (diga quando precisar)
 

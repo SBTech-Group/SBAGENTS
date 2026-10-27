@@ -32,10 +32,10 @@ Não altere nenhum arquivo além do relatório.
 ## Modo ADEQUAÇÃO (só com lista de IDs aprovados)
 
 1. Confirme que a working tree está limpa. Se não estiver, pare e informe — não misture suas mudanças com as de alguém.
-2. Crie o branch `agente/architect/adequacao-AAAA-MM-DD` a partir de `hml` (ADR 0002). Se o repo ainda não tem `hml`, pare e pergunte de qual branch sair.
+2. Crie o branch `agente/architect/adequacao-AAAA-MM-DD` a partir de `staging` (ADR 0003). Se o repo ainda não tem `staging`, pare e pergunte de qual branch sair.
 3. Um commit por achado: `arq(<ID>): <o que mudou>`.
 4. Depois de cada achado, rode `typecheck`, `build` e `test` se existirem. Falhou e a correção não é trivial: desfaça o commit e registre o motivo.
-5. Não faça push e não abra PR; diga o comando e o resumo para o PR, sempre com destino `hml`. Nunca proponha PR para `main`.
+5. Não faça push e não abra PR; diga o comando e o resumo para o PR, sempre com destino `staging`. Nunca proponha PR para `main`.
 
 ## Nunca
 

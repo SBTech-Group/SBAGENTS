@@ -28,7 +28,7 @@ Não altere código. Escreva só `docs/integracao-<integracao>.md`:
 
 ## Modo IMPLEMENTAÇÃO
 
-1. Confirme que a working tree está limpa. O branch de trabalho já foi criado a partir de `hml`.
+1. Confirme que a working tree está limpa. O branch de trabalho já foi criado a partir de `staging`.
 2. Se existir `docs/integracao-<integracao>.md`, siga as etapas dele; senão, siga a seção "No produto" do guia.
 3. Um commit por etapa: `integ(<integracao>): <o que mudou>`.
 4. Migrations: sempre arquivo novo em `supabase/migrations/`, com RLS e policies na mesma migration. Nunca edite migration existente.
@@ -37,7 +37,7 @@ Não altere código. Escreva só `docs/integracao-<integracao>.md`:
 7. Atualize o `AGENTS.md` do produto: integração ativa, funções novas e quem chama cada uma, secrets necessários (só nomes).
 8. No resumo final, liste o que a pessoa precisa fazer fora do código (secrets, cadastro no Hub, deploy das funções) e como testar, usando o "Checklist de pronto" do guia.
 
-Não faça push e não abra PR: o runner cuida disso, sempre para `hml`.
+Não faça push e não abra PR: o runner cuida disso, sempre para `staging`.
 
 ## Nunca
 

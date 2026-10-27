@@ -2,10 +2,10 @@
 // Runner dos agentes SBAGENTS no GitHub Actions.
 //
 // Roda um agente (architect, onboarding) em modo headless no repo alvo, que já
-// está clonado em ./alvo a partir de `hml`, com o SBAGENTS em ./SBAGENTS
+// está clonado em ./alvo a partir de `staging`, com o SBAGENTS em ./SBAGENTS
 // (somente leitura). Cada passo vira evento no Hub (hub-agent-events), que
 // alimenta o Escritório. No fim, empurra um branch agente/<nome>/... e abre PR
-// para `hml` (ADR 0002). Nunca abre PR para `main`.
+// para `staging` (ADR 0003). Nunca abre PR para `main`.
 //
 // Variáveis: AGENTE, MODO, ACHADOS, INTEGRACAO, PRODUTO_SLUG, ALVO_REPO, CLAUDE_CODE_OAUTH_TOKEN ou ANTHROPIC_API_KEY,
 // AGENT_EVENTS_URL, AGENT_EVENTS_TOKEN, GH_TOKEN, AGENT_MAX_USD (padrão 5),
@@ -195,7 +195,7 @@ async function main() {
     }
   }
 
-  const changed = git('diff', '--name-only', 'origin/hml...HEAD').split('\n').filter(Boolean)
+  const changed = git('diff', '--name-only', 'origin/staging...HEAD').split('\n').filter(Boolean)
   if (!changed.length) {
     await emit(
       { status: 'done', custo_usd: custo, turnos, resumo, ended_at: new Date().toISOString() },
@@ -215,11 +215,11 @@ async function main() {
   git('push', 'origin', `HEAD:refs/heads/${BRANCH}`)
   const title = fill(SPEC.titulo_pr) || `${AGENTE}: ${MODO}`
   const prBody = `${resumo ?? ''}\n\n---\nAberto pelo agente \`${AGENTE}\` (SBAGENTS). Execução: ${LOG_URL}\nEquivalente na API: US$ ${custo.toFixed(2)} (com a assinatura, não é cobrado) · ${turnos} turnos.`
-  const prUrl = execFileSync('gh', ['pr', 'create', '--repo', ALVO_REPO, '--base', 'hml', '--head', BRANCH, '--title', title, '--body', prBody], { cwd: ALVO, encoding: 'utf8' }).trim()
+  const prUrl = execFileSync('gh', ['pr', 'create', '--repo', ALVO_REPO, '--base', 'staging', '--head', BRANCH, '--title', title, '--body', prBody], { cwd: ALVO, encoding: 'utf8' }).trim()
 
   await emit(
     { status: 'pr_opened', pr_url: prUrl, custo_usd: custo, turnos, resumo, ended_at: new Date().toISOString() },
-    [{ tipo: 'pr.opened', mensagem: `PR aberto para hml: ${title}`, payload: { url: prUrl, arquivos: changed.length } }],
+    [{ tipo: 'pr.opened', mensagem: `PR aberto para staging: ${title}`, payload: { url: prUrl, arquivos: changed.length } }],
   )
   console.log(`PR: ${prUrl}`)
 }

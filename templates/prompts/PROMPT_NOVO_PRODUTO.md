@@ -193,8 +193,8 @@ Quando terminar, me reporte:
    - Criar projetos Supabase (hml + prd, sa-east-1)
    - Rodar `0001_core.sql` em ambos
    - Configurar wildcard DNS `*.{{DOMINIO_RAIZ}}`
-   - Subir serviços no Coolify (`hml` → homologação, `main` → produção)
-   - Configurar GitHub branch protection em `main` e `hml` (ADR 0002)
+   - Subir serviços no Coolify (`staging` → homologação, `main` → produção)
+   - Configurar GitHub branch protection em `main` e `staging` (ADR 0003)
    - Criar environment `production` no GitHub com revisor
    - Configurar secrets do GitHub (`COOLIFY_WEBHOOK_*`, `COOLIFY_TOKEN_*`)
    - Preencher `.env` com URLs e chaves do Supabase

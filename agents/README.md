@@ -8,7 +8,7 @@ Cada agente é uma pasta aqui. Os mesmos arquivos servem para rodar o agente no 
 | [`onboarding`](onboarding/prompt.md) | Gera `AGENTS.md` e `CLAUDE.md` do produto | um só (`padrao`) | Não |
 | [`integrador`](integrador/prompt.md) | Liga o produto a uma integração de `integracoes/` | `plano`, `implementacao` (os dois exigem integração) | Só em `implementacao` |
 
-Todo agente termina num PR para `hml`. Nenhum agente publica, faz push sozinho ou abre PR para `main`.
+Todo agente termina num PR para `staging`. Nenhum agente publica, faz push sozinho ou abre PR para `main`.
 
 ## Arquivos de um agente
 
