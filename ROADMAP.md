@@ -15,8 +15,8 @@
 
 Marcada como concluída por decisão do Guilherme em 2026-10-15. O código está pronto, mas ainda falta, do lado dele:
 
-- **Publicar** os branches locais `agente/architect/fase1` do Admin Hub (4 commits) e do Promobot (4 commits), com PR para `hml`.
-- **Criar e proteger** `hml` e `main` no GitHub nos repos (ADR 0002).
+- **Publicar** os branches locais `agente/architect/fase1` do Admin Hub (4 commits) e do Promobot (4 commits), com PR para `staging`.
+- **Criar e proteger** `staging` e `main` no GitHub nos repos (ADR 0003).
 - **Admin Hub:** tirar a chave `Adminsbtech123@` da pasta do repo; conferir que os operadores estão em `meta_admins`.
 - **Promobot:** trocar a chave da Evolution; configurar os secrets `HUB_URL`, `HUB_PROVISIONING_TOKEN`, `EVOLUTION_URL`, `EVOLUTION_API_KEY`; publicar `hub-bridge` e `whatsapp-evolution` sem `--no-verify-jwt`; remover as variáveis `VITE_EVOLUTION_API_KEY` e `VITE_HUB_PROVISIONING_TOKEN` do build no Coolify.
 - **Pendentes de correção:** Promobot SEC-06-a e SEC-06-b (funções que leem o JWT sem verificar ou sem autenticação), ArenaHub inteiro (aguarda o repo oficial na SBTech-Group).

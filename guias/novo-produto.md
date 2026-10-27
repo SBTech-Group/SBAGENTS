@@ -20,13 +20,13 @@ Trocar `saas` por `multi-tenant` depois exige migrar todas as tabelas. Decida an
 
 ## 2. Repo no GitHub (Hub, 1 min)
 
-**Hub → Produtos → Novo produto**: nome, slug, descrição, modalidade, módulos e integrações. O Hub cria `SBTech-Group/<slug>` a partir do template da modalidade, preenche `AGENTS.md` e os módulos, cria `hml` e protege `main` e `hml`. Acompanhe no card **Repositório** do produto.
+**Hub → Produtos → Novo produto**: nome, slug, descrição, modalidade, módulos e integrações. O Hub cria `SBTech-Group/<slug>` a partir do template da modalidade, preenche `AGENTS.md` e os módulos, cria `staging` e protege `main` e `staging`. Acompanhe no card **Repositório** do produto.
 
 Sem o Hub (à mão):
 
 
 1. Crie `SBTech-Group/<slug>`, privado.
-2. Crie os branches `main` e `hml` e proteja os dois: PR obrigatório e CI verde (ADR 0002, GIT-01).
+2. Crie os branches `main` e `staging`. Com GitHub pago, proteja os dois (PR obrigatório e CI verde); na conta gratuita, copie o `branch-policy.yml` do Admin Hub (ADR 0003, GIT-01).
 3. Instale o GitHub App **SBTech-Agents** no repo (Settings da organização → GitHub Apps → SBTech-Agents → Configure).
 
 ## 3. Código base (já vem do template)
@@ -40,8 +40,8 @@ Identidade visual não é opcional: `src/styles/sb-tech-base.css` idêntico ao d
 
 ## 4. Supabase (você, 20 min)
 
-1. Crie dois projetos em `sa-east-1`: `<slug>-hml` e `<slug>-prd`.
-2. Aplique as migrations do repo nos dois (`supabase db push` ou pelo painel). Confira RLS em todas as tabelas (MT-01).
+1. Crie o projeto de homologação em `sa-east-1` (`<slug>-hml`). O de produção (`<slug>-prd`) só quando o produto tiver clientes reais; até lá o app PRD aponta para o de HML.
+2. No repo, cadastre o secret `SUPABASE_ACCESS_TOKEN` e a variável `SUPABASE_PROJECT_REF` e copie `functions.yml` e `database.yml` do Admin Hub: migrations e Edge Functions passam a sair de `staging`. Confira RLS em todas as tabelas (MT-01).
 3. Auth → URL Configuration:
    - Site URL: o domínio do produto;
    - Redirect URLs: `https://*.<dominio>/**` (multi-tenant) ou `https://<dominio>/**` (saas).
@@ -57,14 +57,14 @@ O Hub cria no Coolify, junto com o repo, um projeto com dois environments, cada 
 
 | Environment | Servidor | Branch | Domínio |
 |---|---|---|---|
-| `homologação` | Homologação | `hml` | `<slug>-hlg.sbtech-group.com` |
+| `homologação` | Homologação | `staging` | `<slug>-hlg.sbtech-group.com` |
 | `produção` | Produção | `main` | `<slug>.sbtech-group.com` |
 
 **Pré-requisito, uma vez por Hub:** os secrets `COOLIFY_URL`, `COOLIFY_API_TOKEN` (abilities `write` e `deploy`), `COOLIFY_GITHUB_APP_UUID`, `COOLIFY_SERVER_HML_UUID` e `COOLIFY_SERVER_PRD_UUID` no Supabase do Hub, mais `COOLIFY_READ_TOKEN` (`read` e `read:sensitive`) para a Sentinela. Lista completa e função de cada um em `AGENTS.md` do Admin Hub, seção "Segredos do Hub". Sem eles, a tela do produto mostra quais faltam.
 
 Se a criação falhar, a tela explica o motivo e o botão "Criar ambientes" continua de onde parou (idempotente). **Enquanto o Hub não tiver os secrets, crie à mão** o mesmo desenho no Coolify:
 
-- duas aplicações a partir do repo, com GitHub App: homologação no branch `hml`, produção no `main`;
+- duas aplicações a partir do repo, com GitHub App: homologação no branch `staging`, produção no `main`;
 - Nixpacks, site dinâmico, `npm install`, `npm run build`, publicar `/dist`, porta 3000, `NIXPACKS_NODE_VERSION=20`;
 - um domínio por ambiente, conforme a tabela.
 
@@ -74,7 +74,7 @@ Depois siga os passos abaixo, que valem para os dois caminhos.
 2. DNS: apontar cada domínio para o servidor do ambiente. No multi-tenant, o wildcard `*.<dominio>` no DNS e no Coolify.
 3. Conferir que a fonte GitHub do Coolify enxerga o repo novo (se ela não estiver em "All repositories").
 4. Primeiro deploy: botão "Deploy" de cada ambiente na tela do produto (pede confirmação).
-5. Depois: merge em `hml` publica homologação; PR de `hml` para `main` publica produção.
+5. Depois: merge em `staging` publica homologação; PR de `staging` para `main` publica produção.
 
 A Sentinela (`hub-log-watch` no Admin Hub) passa a vigiar os dois ambientes: erro nos logs, deploy falho e app parado viram cards em Tarefas, ligados ao produto.
 

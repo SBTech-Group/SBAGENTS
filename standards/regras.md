@@ -51,7 +51,7 @@ Tipos: `mt` = multi-tenant · `saas` = saas (um tenant, isolamento por usuário)
 
 | ID | Regra | Sev. | Tipos | Como verificar |
 |---|---|---|---|---|
-| GIT-01 | Dois branches fixos e protegidos: `hml` (homologação) e `main` (produção). Trabalho sai de `hml` e volta por PR; `main` só recebe PR de `hml` ou `hotfix/*`. Branch de agente: `agente/<nome>/<assunto>`, nunca com PR para `main`. Ver ADR 0002. | importante | todos | `git branch -a`; `git log --first-parent` (commits sem merge); proteção de branch no GitHub |
+| GIT-01 | Dois branches fixos: `staging` (homologação) e `main` (produção). Trabalho sai de `staging` e volta por PR; `main` só recebe PR de `staging` ou `hotfix/*`. Branch de agente: `agente/<nome>/<assunto>`, nunca com PR para `main`. Ver ADR 0003. Sem GitHub pago, `branch-policy.yml` sinaliza desvios. | importante | todos | `git branch -a`; `git log --first-parent` (commits sem merge); proteção de branch no GitHub ou `branch-policy.yml` |
 | GIT-02 | Workflow de CI em PR roda `typecheck`, `build` e `test`. | importante | todos | `.github/workflows/` |
 | GIT-03 | Raiz do repo sem artefatos: logs, diffs, dumps, screenshots, `node_modules - Copia`. Estão no `.gitignore` ou removidos. | cosmético | todos | `ls`, `git status --short` |
 | TST-01 | Existem testes automatizados para isolamento (tenant A não lê tenant B) e para `tenant-provision` (idempotência). | importante | mt | `*.test.ts`, `*.spec.ts`, `e2e/` |

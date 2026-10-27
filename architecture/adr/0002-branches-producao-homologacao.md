@@ -1,7 +1,7 @@
 # ADR 0002 — Dois branches fixos: `main` (produção) e `hml` (homologação)
 
 - Data: 2026-10-15
-- Status: aceito
+- Status: substituído por 0003 (o branch de homologação é `staging`)
 - Escopo: global
 
 ## Contexto

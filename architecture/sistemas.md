@@ -8,9 +8,9 @@ Levantado em 2026-10-14 a partir dos repos em `C:\Projetos\SB TECH`, com o Admin
 
 | Sistema | Pasta local | Repo oficial | Modalidade | Observação |
 |---|---|---|---|---|
-| Admin Hub | `Admin Hub` | `SBTech-Group/hub-admin` | interno | Supabase `zzhkigjadsfultoynmha` |
-| ArenaHub | `ArenaHub - HML` | `SBTech-Group/Arena-Hub-HML` (branch `integration/sbtech-meta-onboarding`) | multi-tenant | **A pasta local aponta para `Correa-Gui/Arena-Hub-HML`, que segundo `docs/CODEX-HANDOFF.md` do Hub não é o repo de deploy.** Supabase `pdrfebbuwhsprbmafbka` |
-| ArenaHub (produção) | `ArenaHub - PRD` | sem remote local | multi-tenant | a confirmar |
+| Admin Hub | `hub-admin` | `SBTech-Group/hub-admin` (branches `staging`/`main`) | interno | Supabase `zzhkigjadsfultoynmha` (HML, único por enquanto) |
+| ArenaHub | `Arena-Hub-HML` | `SBTech-Group/Arena-Hub-HML` (branches `staging`/`main`) | multi-tenant | Supabase `pdrfebbuwhsprbmafbka` (HML, único por enquanto) |
+| ArenaHub (produção) | — | branch `main` do mesmo repo | multi-tenant | App PRD no Coolify; usa o Supabase de HML até existir o de produção |
 | ArenaHub Chatbot | `ArenaHub Chatbot - PRD` | `arthursbessa/chatbot-beach-clubs` | serviço (FastAPI) | Consome funções `chatbot-*` do ArenaHub |
 | Promobot | `Promobot` | `SBTech-Group/promobot` | saas | Branch padrão `staging` |
 | SB Template / Template Saas | `SB Template`, `Template Saas` | sem git | templates | Base dos templates do "Novo produto" |

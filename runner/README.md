@@ -1,14 +1,14 @@
 # Runner dos agentes
 
-O workflow `.github/workflows/agent-run.yml` roda um agente num repo de produto pelo GitHub Actions. Cada execução vira uma linha em `agent_runs` e uma sequência de `agent_events` no Hub, e aparece ao vivo no módulo **Escritório**. O resultado é sempre um PR para `hml`, nunca para `main` (ADR 0002).
+O workflow `.github/workflows/agent-run.yml` roda um agente num repo de produto pelo GitHub Actions. Cada execução vira uma linha em `agent_runs` e uma sequência de `agent_events` no Hub, e aparece ao vivo no módulo **Escritório**. O resultado é sempre um PR para `staging`, nunca para `main` (ADR 0003).
 
 ## Fluxo
 
 1. Você dispara o workflow (Actions → "Rodar agente" → Run workflow) com repo, sala do produto, agente, modo e, no integrador, a integração. Os agentes e modos disponíveis estão em `agents/README.md`; o runner lê os modos de cada agente em `agents/<agente>/runner.json`.
-2. O job pega um token do GitHub App válido só para o repo alvo, clona o SBAGENTS e o alvo (a partir de `hml`).
+2. O job pega um token do GitHub App válido só para o repo alvo, clona o SBAGENTS e o alvo (a partir de `staging`).
 3. `runner/run.mjs` cria o branch `agente/<agente>/<modo>[-<integracao>]-<data>-<id>`, avisa o Hub (`run.started`) e roda o Claude Code headless com o prompt do agente.
 4. Durante a execução, manda no máximo um evento de ferramenta a cada 20 s (`tool.used`).
-5. No fim: confere que nenhum caminho proibido foi tocado (`.github/workflows/`, `.env*`, chaves), empurra o branch, abre o PR para `hml` e marca a execução como `pr_opened` com custo e turnos. Sem alterações, marca `done`.
+5. No fim: confere que nenhum caminho proibido foi tocado (`.github/workflows/`, `.env*`, chaves), empurra o branch, abre o PR para `staging` e marca a execução como `pr_opened` com custo e turnos. Sem alterações, marca `done`.
 6. Se o job morrer no meio (tempo, cancelamento), `runner/fail.mjs` marca a execução como falha.
 
 ## Limites de segurança
@@ -21,7 +21,7 @@ O workflow `.github/workflows/agent-run.yml` roda um agente num repo de produto 
 | Teto de custo por execução (padrão US$ 5, só vale com chave da API) e de turnos (80) | `--max-budget-usd`, `--max-turns`, variável `AGENT_MAX_USD` |
 | Tempo máximo de 45 min | `timeout-minutes` |
 | Caminhos proibidos checados antes do push | `PROIBIDOS` em `run.mjs` |
-| PR só para `hml`, e `hml` protegido exige revisão humana | `gh pr create --base hml` + proteção de branch |
+| PR só para `staging`, e `staging` protegido exige revisão humana | `gh pr create --base staging` + proteção de branch |
 | Um agente por repo por vez | `concurrency` |
 
 O agente não recebe segredos do produto: nenhum banco, nenhuma chave de cliente.
@@ -54,8 +54,8 @@ Sem permissão de Administration, Workflows ou Secrets.
 
 **4. No Supabase do Hub:** aplicar a migration `20261015000100_agent_office.sql`, configurar o secret `AGENT_EVENTS_TOKEN` (mesmo valor) e publicar `hub-agent-events`.
 
-**5. Nos repos alvo:** ter o branch `hml`.
+**5. Nos repos alvo:** ter o branch `staging`.
 
 ## Primeiro teste
 
-Rode `architect` em modo `diagnostico` no Promobot (`SBTech-Group/promobot`, sala `promobot`). Esperado: um PR para `hml` com `docs/diagnostico-<data>.md`, e no Escritório o arquiteto aparece trabalhando na sala do Promobot e depois aguardando revisão. Compare o diagnóstico com `diagnosticos/2026-10-14/promobot.md`.
+Rode `architect` em modo `diagnostico` no Promobot (`SBTech-Group/promobot`, sala `promobot`). Esperado: um PR para `staging` com `docs/diagnostico-<data>.md`, e no Escritório o arquiteto aparece trabalhando na sala do Promobot e depois aguardando revisão. Compare o diagnóstico com `diagnosticos/2026-10-14/promobot.md`.

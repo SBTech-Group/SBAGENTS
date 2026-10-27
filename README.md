@@ -16,7 +16,7 @@ Playbook da SB Tech: como todo produto da casa é construído, integrado e manti
 
 ## Rodar um agente (servidor)
 
-Neste repo: **Actions → Rodar agente → Run workflow**. Escolha o repo, a sala no Escritório, o agente e o modo. O resultado é sempre um PR para `hml` no repo do produto, e a execução aparece ao vivo no Escritório do Admin Hub.
+Neste repo: **Actions → Rodar agente → Run workflow**. Escolha o repo, a sala no Escritório, o agente e o modo. O resultado é sempre um PR para `staging` no repo do produto, e a execução aparece ao vivo no Escritório do Admin Hub.
 
 | Agente | Para |
 |---|---|

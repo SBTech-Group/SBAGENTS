@@ -1,5 +1,10 @@
 # Changelog do playbook
 
+## 0.7.0 — 2026-10-27
+
+- ADR 0003 substitui o ADR 0002: o branch de homologação é `staging` (não `hml`). GIT-01, `standards/arquitetura.md`, guias, prompts, templates e o runner de agentes (`agent-run.yml`, `runner/run.mjs`, que procuravam `hml` e falhavam nos repos atuais) atualizados.
+- `standards/arquitetura.md > CI/CD e branches` descreve o que roda de fato: deploy nativo do Coolify (sem `staging.yml`/`production.yml`), `ci.yml`, `branch-policy.yml` no lugar da proteção de branch (conta gratuita), `functions.yml` e `database.yml` para o Supabase de HML, único por sistema por enquanto.
+
 ## 0.6.2 — 2026-10-16
 
 - Correção de texto: `standards/arquitetura.md` documenta o desenho do Coolify (projeto por produto, environments `homologação`/`produção`, servidor, branch e domínio de cada) e a Sentinela. O repo precisa ter `hml` e `main` antes do primeiro deploy.

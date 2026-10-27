@@ -327,8 +327,8 @@ Em dev local, usar `VITE_DEV_TENANT_SLUG` no `.env` como fallback.
 | | Staging | Produção |
 |---|---|---|
 | Servidor | VPS menor (KVM 2) | VPS principal (KVM 4+) |
-| Supabase | Projeto Free (org Free) | Projeto Pro (org Pro) |
-| Branch | `hml` | `main` |
+| Supabase | Projeto Free (org Free) | Projeto Pro (org Pro) — ainda não criado; hoje o PRD usa o de HML (ver "Supabase por ambiente") |
+| Branch | `staging` | `main` |
 | Acesso | Equipe interna | Clientes reais |
 | SSL | Opcional | Obrigatório (wildcard) |
 
@@ -338,13 +338,13 @@ No Coolify a hierarquia é Projeto → Environment → Aplicação, e o servidor
 
 | Environment | Servidor | Branch | Domínio | App |
 |---|---|---|---|---|
-| `homologação` | Homologação | `hml` | `<slug>-hlg.sbtech-group.com` | `<Produto> - HML` |
+| `homologação` | Homologação | `staging` | `<slug>-hlg.sbtech-group.com` | `<Produto> - HML` |
 | `produção` | Produção | `main` | `<slug>.sbtech-group.com` | `<Produto> - PRD` |
 
 - Projeto com nome `<Produto> (<slug>)`. Perfil de cada app: Nixpacks, publica `/dist`, porta 3000, `NIXPACKS_NODE_VERSION`.
 - As variáveis `VITE_SUPABASE_*` são manuais por ambiente (cada ambiente tem o seu projeto Supabase). O primeiro deploy é manual e confirmado, e só acontece depois delas; os deploys seguintes seguem o CI/CD abaixo.
 - Os uuids dos dois apps ficam em `produtos.coolify_*` no Hub. É por eles que a Sentinela lê os logs.
-- O repositório precisa ter os dois branches (`hml` e `main`) antes do primeiro deploy: o Coolify falha com "Remote branch not found" se faltar um.
+- O repositório precisa ter os dois branches (`staging` e `main`) antes do primeiro deploy: o Coolify falha com "Remote branch not found" se faltar um.
 
 ### Sentinela (leitura de logs)
 
@@ -370,62 +370,42 @@ Segredos de servidor (`SUPABASE_SERVICE_ROLE_KEY`, `HUB_PROVISIONING_TOKEN`, etc
 
 ## CI/CD e branches
 
-> Atualizado pelo ADR 0002 (`architecture/adr/0002-branches-producao-homologacao.md`), SBAGENTS 0.4.0.
+> ADR 0003 (`architecture/adr/0003-branches-staging-main.md`), SBAGENTS 0.7.0. Substitui o ADR 0002 (`hml`).
 
-| Branch | Propósito | Deploy automático |
+| Branch | Propósito | Deploy |
 |---|---|---|
-| `main` | Produção. Só recebe PR de `hml` ou `hotfix/*`. | Sim, após aprovação no environment `production` |
-| `hml` | Homologação. Recebe os PRs das branches de trabalho. | Sim, automático |
-| `feature/*`, `fix/*` | Trabalho de pessoas, a partir de `hml`. | Não |
-| `agente/<nome>/<assunto>` | Trabalho de agentes, a partir de `hml`. | Não |
-| `hotfix/*` | Correção urgente, a partir de `main`; depois `main` é mesclado em `hml`. | Não |
+| `main` | Produção. Só recebe PR de `staging` ou `hotfix/*`. | Coolify publica o app PRD a cada merge (deploy nativo, sem workflow) |
+| `staging` | Homologação. Recebe os PRs das branches de trabalho. | Coolify publica o app HML; `functions.yml` e `database.yml` publicam Edge Functions e migrations no Supabase de HML |
+| `feature/*`, `fix/*` | Trabalho de pessoas, a partir de `staging`. | Não |
+| `agente/<nome>/<assunto>` | Trabalho de agentes, a partir de `staging`. | Não |
+| `hotfix/*` | Correção urgente, a partir de `main`; depois `main` é mesclado em `staging`. | Não |
 
 **Regras:**
-- Nunca push direto em `main` ou `hml` — sempre via PR, de pessoa ou de agente
-- Branches de trabalho → PR para `hml` (CI verde + 1 revisão humana)
-- `hml` → PR para `main` (CI verde + aprovação no GitHub Environment `production`)
+- Nunca push direto em `main` ou `staging` — sempre via PR, de pessoa ou de agente
+- Branches de trabalho → PR para `staging` (CI verde)
+- `staging` → PR para `main` (CI verde + decisão humana de promover)
 - Agente nunca abre PR para `main`
 
-### Proteção de branches no GitHub
+### Proteção de branches
 
-**`main`:** PR obrigatório, 1 aprovação, status checks passando, sem bypass.
-**`hml`:** PR obrigatório, 1 aprovação, status checks passando.
-**Environment `production`:** revisor obrigatório.
+A conta `SBTech-Group` é gratuita: repositório privado não tem proteção de branch nem rulesets. Enquanto for assim, o workflow `branch-policy.yml` de cada repo marca em vermelho push direto em `staging`/`main` e PR para `main` que não venha de `staging` ou `hotfix/*`. Com GitHub pago: PR obrigatório e status check `verify` nos dois branches.
+
+### Supabase por ambiente
+
+Hoje cada sistema tem **um** projeto Supabase, de homologação; o app PRD do Coolify aponta para ele. O projeto de produção é criado quando o produto tiver clientes reais. Até lá:
+- Edge Functions saem só de `staging` (`functions.yml`); `main` não publica funções.
+- Migrations novas em `supabase/migrations/` que chegam em `staging` são aplicadas pelo `database.yml` (Management API, registro em `supabase_migrations.schema_migrations`). Banco não muda por fora do workflow.
 
 ### Workflows
 
-```yaml
-# .github/workflows/staging.yml
-name: Deploy Staging
-on:
-  push:
-    branches: [hml]
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Trigger Coolify
-        run: |
-          curl -X POST "${{ secrets.COOLIFY_WEBHOOK_STAGING }}" \
-            -H "Authorization: Bearer ${{ secrets.COOLIFY_TOKEN_STAGING }}"
-```
+| Arquivo | Dispara | Faz |
+|---|---|---|
+| `ci.yml` | PR para `staging`/`main` | segredos versionados, typecheck, build, testes (inclusive Deno das Edge Functions) — job `verify` |
+| `branch-policy.yml` | PR para `main`, push em `staging`/`main` | sinaliza desvio do fluxo acima |
+| `functions.yml` | push em `staging` em `supabase/functions/**`, `supabase/config.toml` | `supabase functions deploy` de todas as funções (exceto `.deploy-ignore`) com CLI de versão fixa |
+| `database.yml` | push em `staging` em `supabase/migrations/**`; *Run workflow* | aplica migrations novas; manual: `migration` (uma antiga) ou `query` (diagnóstico somente leitura) |
 
-```yaml
-# .github/workflows/production.yml
-name: Deploy Produção
-on:
-  push:
-    branches: [main]
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    environment: production
-    steps:
-      - name: Trigger Coolify
-        run: |
-          curl -X POST "${{ secrets.COOLIFY_WEBHOOK_PROD }}" \
-            -H "Authorization: Bearer ${{ secrets.COOLIFY_TOKEN_PROD }}"
-```
+Secrets e variáveis do repositório: `SUPABASE_ACCESS_TOKEN` (secret) e `SUPABASE_PROJECT_REF` (variável). Modelo pronto: `hub-admin/.github/workflows/`.
 
 ---
 
@@ -437,7 +417,8 @@ jobs:
 | `VITE_SUPABASE_ANON_KEY` | Coolify env vars | Frontend (público) |
 | `SUPABASE_SERVICE_ROLE_KEY` | Infisical → Coolify | Edge Functions |
 | `HUB_PROVISIONING_TOKEN` | Infisical → Supabase secrets | Edge Function `tenant-provision` (se aplicável) |
-| `COOLIFY_WEBHOOK_*` | GitHub Secrets | GitHub Actions |
+| `SUPABASE_ACCESS_TOKEN` | GitHub Secrets (repo) | `functions.yml`, `database.yml` |
+| `SUPABASE_PROJECT_REF` | GitHub Variables (repo) | `functions.yml`, `database.yml` |
 
 Regras imutáveis:
 - Nunca commitar `.env` com valores reais — apenas `.env.example`

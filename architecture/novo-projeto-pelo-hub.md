@@ -30,7 +30,7 @@ No Hub, "Novo produto" + escolha da modalidade (`saas` ou `multi-tenant`) entreg
    3. aplica proteção na `main` (PR obrigatório, CI verde);
    4. grava em `produtos`: `modelo` (`saas` ou `tenant`, coluna que já existe), `repo_url`, `playbook_version`, status `criado`;
    5. registra em `eventos_auditoria`;
-   6. cria no Coolify o projeto com os environments `homologação` (servidor Homologação, branch `hml`) e `produção` (servidor Produção, branch `main`) e um app em cada, **sem deploy** (as variáveis do Supabase do produto ainda não existem). Falha aqui não desfaz o repo; a tela oferece "Criar ambientes".
+   6. cria no Coolify o projeto com os environments `homologação` (servidor Homologação, branch `staging`) e `produção` (servidor Produção, branch `main`) e um app em cada, **sem deploy** (as variáveis do Supabase do produto ainda não existem). Falha aqui não desfaz o repo; a tela oferece "Criar ambientes".
 4. A tela mostra o link do repo e o checklist do que continua manual.
 
 ## O que continua manual (por enquanto)

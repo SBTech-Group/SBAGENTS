@@ -1,8 +1,8 @@
 # <Produto> — instruções para agentes
 
 - Tipo: `multi-tenant` | `saas` | `interno` | `servico`
-- Segue: SBAGENTS v0.6.2 (padrões em `../SBAGENTS/standards/00-index.md`, somente leitura)
-- Branches: `hml` (homologação, recebe os PRs) · `main` (produção, só recebe PR de `hml`). Agentes trabalham em `agente/<nome>/<assunto>`.
+- Segue: SBAGENTS v0.7.0 (padrões em `../SBAGENTS/standards/00-index.md`, somente leitura)
+- Branches: `staging` (homologação, recebe os PRs) · `main` (produção, só recebe PR de `staging`). Agentes trabalham em `agente/<nome>/<assunto>`.
 
 ## O que este sistema faz
 
@@ -35,7 +35,7 @@ Marque as que o produto usa. Cada uma segue o guia em `../SBAGENTS/integracoes/`
 
 ## Ambientes
 
-Projeto no Coolify com dois environments: `homologação` (servidor Homologação, branch `hml`, `<slug>-hlg.sbtech-group.com`) e `produção` (servidor Produção, branch `main`, `<slug>.sbtech-group.com`). Detalhes em `../SBAGENTS/standards/arquitetura.md > Ambientes`. Erros de log e deploy falho dos dois chegam como cards em Tarefas do Hub (Sentinela).
+Projeto no Coolify com dois environments: `homologação` (servidor Homologação, branch `staging`, `<slug>-hlg.sbtech-group.com`) e `produção` (servidor Produção, branch `main`, `<slug>.sbtech-group.com`). Detalhes em `../SBAGENTS/standards/arquitetura.md > Ambientes`. Erros de log e deploy falho dos dois chegam como cards em Tarefas do Hub (Sentinela).
 
 ## Pontos sensíveis
 

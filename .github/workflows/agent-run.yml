@@ -1,7 +1,7 @@
 name: Rodar agente
 
 # Roda um agente do SBAGENTS num repo de produto, sem ninguém no terminal.
-# Resultado: um PR para `hml` no repo alvo e os eventos no Escritório do Hub.
+# Resultado: um PR para `staging` no repo alvo e os eventos no Escritório do Hub.
 # Configuração necessária: runner/README.md.
 
 on:
@@ -78,11 +78,11 @@ jobs:
         with:
           path: SBAGENTS
 
-      - name: Checkout do repo alvo a partir de hml
+      - name: Checkout do repo alvo a partir de staging
         uses: actions/checkout@v4
         with:
           repository: ${{ inputs.repo }}
-          ref: hml
+          ref: staging
           token: ${{ steps.token.outputs.token || secrets.AGENTS_GH_TOKEN }}
           path: alvo
 
